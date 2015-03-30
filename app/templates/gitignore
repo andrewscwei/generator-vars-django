@@ -5,6 +5,7 @@ bin
 lib
 <%= paths.build %>
 <%= paths.tmp %>
+pip-selfcheck.json
 .environment
 .DS_STORE
 .Python
