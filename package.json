@@ -1,6 +1,6 @@
 {
     "name": "generator-vars-django",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "VARIANTE's Yeoman generator for a raw Django web app.",
     "license": "MIT",
     "repository":

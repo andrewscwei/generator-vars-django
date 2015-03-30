@@ -1,7 +1,9 @@
-#<%= appname %>
+# <%= appname %>
+
 This project is scaffolded by [Yeoman](http://yeoman.io). See [generator-vars-django](https://github.com/VARIANTE/generator-vars-django.git) for more details.
 
-##Usage
+## Usage
+
 Install node modules if they are not already installed:
 ```
 $ npm install
@@ -69,15 +71,18 @@ Test prod environment. You should see "Hello, World!" in ```localhost:8080```:
 $ fab deploy serve
 ```
 
-##Tasks
-###```gulp```
+## Tasks
+
+### ```gulp```
+
 ```gulp build --debug```: Builds all static and template files in the ```app``` directory but skips all compression tasks. Built files are stored in the ```.tmp``` directory.
 
 ```gulp build```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
 
 See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
 
-###```fabric```
+### ```fabric```
+
 ```fab build:dev```: Builds and deploys static and template files to the ```.tmp``` directory so they are ready to be served using dev settings.
 
 ```fab build```: Builds and deploys static, template, and project files to the ```build``` directory so they are ready to be served using prod settings.
@@ -88,24 +93,28 @@ See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify``
 
 See ```fabfile.py``` for more tasks.
 
-##Cloud Setup (Linux)
-###Updating APT Packages
+## Cloud Setup (Linux)
+
+### Updating APT Packages
+
 ```
 $ sudo apt-get update
 ```
 
-###Installing ```git```
+### Installing ```git```
+
 ```
 $ sudo apt-get install git-core
 ```
 
-###Installing ```upstart```
+### Installing ```upstart```
+
 ```
 $ sudo apt-get install upstart
 ```
 Yes, replace ```sysvinit```
 
-###Installing ```nvm```/```node```/```npm``` Globally
+### Installing ```nvm```/```node```/```npm``` Globally
 
 Install dependencies:
 ```
@@ -159,34 +168,40 @@ Set ```node``` version as default so shell can remember it the next time you log
 $ nvm alias default x.xx.x
 ```
 
-###Installing ```python```/```pip```
+### Installing ```python```/```pip```
+
 ```
 $ sudo apt-get install python-pip python-virtualenv python-dev build-essential
 ```
 
-###Installing PostgreSQL
+### Installing PostgreSQL
+
 ```
 $ sudo apt-get install libpq-dev python-dev python-psycopg2
 $ sudo apt-get install postgresql postgresql-contrib
 ```
 
-###Installing MySQL
+### Installing MySQL
+
 ```
 $ sudo apt-get install mysql-server
 $ sudo apt-get install python-mysqldb
 ```
 
-###Installing uWSGI
+### Installing uWSGI
+
 ```
 $ sudo pip install uwsgi
 ```
 
-###Installing Nginx
+### Installing Nginx
+
 ```
 $ sudo apt-get install nginx
 ```
 
-###Serving with uWSGI and Nginx
+### Serving with uWSGI and Nginx
+
 Configure ```<%= appname %>_uwsgi.ini``` and ```<%= appname %>_nginx.conf``` files to reflect the correct server name.
 
 Symlink ```<%= appname %>_nginx.conf``` so Nginx can see it:
@@ -234,9 +249,11 @@ end script
 
 Visit external IP of your VM instance. Voila.
 
-##Common Issues
+## Common Issues
+
 1. If Nginx cannot serve the project (getting a 500 Internal Error or something like that), check the error logs at ```/var/log/nginx/error.log```.
 2. If Modernizr is not being deployed, you will need to add ```"main": "modernizr.js"``` to its ```bower.json``` so that ```main-bower-files``` can pick it up.
 
-##License
+## License
+
 This software is released under the [MIT License](http://opensource.org/licenses/MIT).

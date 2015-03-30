@@ -1,7 +1,9 @@
-#generator-vars-django
+# generator-vars-django
+
 VARIANTE's Yeoman generator for a raw Django web app.
 
-##Features
+## Features
+
 - Django 1.7
 - ```node```
 - ```bower```
@@ -13,12 +15,14 @@ VARIANTE's Yeoman generator for a raw Django web app.
 - uWSGI and Nginx configurations
 - Sublime project (optional)
 
-##Libraries
+## Libraries
+
 - Bootstrap (optional)
 - Modernizr (optional)
 - jQuery
 
-##Structure
+## Structure
+
 ```
 .
 +-- app
@@ -72,15 +76,18 @@ VARIANTE's Yeoman generator for a raw Django web app.
 +-- README.md
 ```
 
-##Tasks
-###```gulp```
+## Tasks
+
+### ```gulp```
+
 ```gulp build --debug```: Builds all static and template files in the ```app``` directory but skips all compression tasks. Built files are stored in the ```.tmp``` directory.
 
 ```gulp build```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
 
 See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
 
-###```fabric```
+### ```fabric```
+
 ```fab build:dev```: Builds and deploys static and template files to the ```.tmp``` directory so they are ready to be served using dev settings.
 
 ```fab build```: Builds and deploys static, template, and project files to the ```build``` directory so they are ready to be served using prod settings.
@@ -91,7 +98,8 @@ See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify``
 
 See ```fabfile.py``` for more tasks.
 
-##Usage
+## Usage
+
 Install ```yo```
 ```
 npm install -g yo
@@ -114,5 +122,6 @@ yo vars-django
 
 For details on initial setup procedures of the project, see its generated README.md file.
 
-##License
+## License
+
 This software is released under the [MIT License](http://opensource.org/licenses/MIT).
