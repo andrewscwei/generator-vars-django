@@ -129,7 +129,7 @@ gulp.task('static', ['images', 'fonts', 'styles', 'vendors', 'scripts', 'extras'
  */
 gulp.task('templates', function()
 {
-    return gulp.src(['<%= paths.src %>/templates/**/*.'+TEMPLATES_PATTERN, 'robots.txt'])
+    return gulp.src(['<%= paths.src %>/templates/**/*.'+TEMPLATES_PATTERN, '<%= paths.src %>/templates/robots.txt'])
         .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-minify-html'], $.minifyHtml({empty: true, conditionals: true, loose: true })))
         .pipe(gulp.dest('<%= paths.build %>/templates'));
 });
