@@ -1,0 +1,65 @@
+{
+    "name": "generator-vars-django",
+    "version": "0.1.0",
+    "description": "VARIANTE's Yeoman generator for a raw Django web app.",
+    "license": "MIT",
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/VARIANTE/generator-vars-django"
+    },
+    "author":
+    {
+        "name": "VARIANTE"
+    },
+    "main": "app/index.js",
+    "engines":
+    {
+        "node": ">=0.12.0",
+        "npm": ">=2.7.3"
+    },
+    "scripts":
+    {
+        "test": "mocha --reporter spec"
+    },
+    "files":
+    [
+        "app"
+    ],
+    "keywords":
+    [
+        "yeoman-generator",
+        "web",
+        "app",
+        "modernizr",
+        "jquery",
+        "gulp",
+        "vars",
+        "stylus",
+        "sass",
+        "browserify",
+        "browser-sync",
+        "smacss",
+        "django",
+        "mysql",
+        "postgresql",
+        "sqlite3"
+    ],
+    "dependencies":
+    {
+        "chalk": "^1.0.0",
+        "yeoman-generator": "^0.18.10",
+        "yosay": "^1.0.3"
+    },
+    "peerDependencies":
+    {
+        "yo": ">=1.4.6",
+        "generator-mocha": ">=0.1.6",
+        "gulp": ">=3.8.11"
+    },
+    "devDependencies":
+    {
+        "mocha": "*"
+    },
+    "readmeFilename": "README.md"
+}

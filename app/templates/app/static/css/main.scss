@@ -1,0 +1,16 @@
+/**
+ *  <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
+ *  (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
+ *
+ *  This software is released under the MIT License:
+ *  http://www.opensource.org/licenses/mit-license.php
+ */
+
+$base-path: '../' !default;<% if (includeBootstrap) {%>
+$icon-font-path: '../fonts/';
+
+@import '../../../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap';<% } %>
+
+@import 'base/normalize';
+@import 'base/typography';
+@import 'base/layout';

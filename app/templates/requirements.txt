@@ -1,0 +1,6 @@
+Django==1.7
+ecdsa==0.13
+Fabric==1.10.1
+paramiko==1.15.2<% if (includePostgreSQL) { %>
+psycopg2==2.6<% } %>
+pycrypto==2.6.1

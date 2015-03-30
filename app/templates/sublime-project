@@ -1,0 +1,38 @@
+{
+    "build_systems":
+    [
+        {
+            "cmd": ["gulp"],
+            "name": "Gulp",
+            "path": "/usr/local/bin",
+            "working_dir": "<%= '${project_path}' %>"
+        }
+    ],
+    "folders":
+    [
+        {
+            "file_exclude_patterns":
+            [
+                "*.ico",
+                ".bowerrc",
+                ".editorconfig",
+                ".gitattributes",
+                ".Python",
+                ".secretkey"
+            ],
+            "folder_exclude_patterns":
+            [
+                ".*",
+                "bin",
+                "include",
+                "lib",
+                "<%= paths.build %>",
+                "<%= paths.tmp %>",
+                "node_modules",
+                "bower_components"
+            ],
+            "follow_symlinks": true,
+            "path": "."
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+node_modules
+bower_components
+include
+bin
+lib
+<%= paths.build %>
+<%= paths.tmp %>
+.environment
+.DS_STORE
+.Python
+*.pyc
+*.sublime-project
+*.sublime-workspace
