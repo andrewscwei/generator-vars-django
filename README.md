@@ -120,7 +120,7 @@ Generate the project
 yo vars-django
 ```
 
-For details on initial setup procedures of the project, see its generated README.md file.
+For details on initial setup procedures of the project, see its generated ```README.md``` file.
 
 ## License
 

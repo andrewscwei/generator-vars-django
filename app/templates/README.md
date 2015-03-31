@@ -14,7 +14,7 @@ Install bower components if they are not already installed:
 $ bower install
 ```
 
-If you are using Modernizr, and the following to its ```bower.json``` so ```main-bower-files``` can pick it up:
+If you are using Modernizr, add the following to its ```bower.json``` so ```main-bower-files``` can pick it up:
 ```
 "main": "modernizr.js"
 ```
@@ -54,6 +54,11 @@ $ mysql_secure_installation
 $ mysql --user=root --password={password}
 $ mysql> create database {db_name};
 $ mysql> quit;
+```
+
+Update environment variables with new database configs:
+```
+$ nano bin/activate
 ```
 
 Apply initial migration:
