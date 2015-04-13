@@ -28,6 +28,9 @@ constructor: function()
 {
     yeoman.generators.Base.apply(this, arguments);
 
+    this.argument('projectname', { type: String, required: false });
+    this.appname = this.projectname || this.appname;
+
     this.option('test-framework',
     {
         desc: 'Test framework to be invoked',
@@ -78,17 +81,11 @@ welcoming: function()
 
     if (!this.options['skip-welcome-message'])
     {
-        this.log(yosay('\'Allo \'allo! Out of the box I include Browserify and jQuery as well as Gulp and Fabric to build your Django app.'));
+        this.log(yosay('\'Allo \'allo! Out of the box I include Browserify and jQuery as well as Gulp to build your Django app.'));
     }
 
     var prompts =
     [
-        {
-            type: 'input',
-            name: 'name',
-            message: 'What is the name of your project?',
-            default: this.appname
-        },
         {
             type: 'input',
             name: 'appauthor',
@@ -103,7 +100,6 @@ welcoming: function()
 
     this.prompt(prompts, function(answers)
     {
-        this.appname = answers.name;
         this.appauthor = answers.appauthor;
         this.appauthoremail = answers.appauthoremail;
 
@@ -299,14 +295,6 @@ writing:
     },
 
     /**
-     * Generates fabfile.py.
-     */
-    fabfile: function()
-    {
-        this.copy('fabfile.py', 'fabfile.py');
-    },
-
-    /**
      * Generates package.json.
      * @return {[type]} [description]
      */
@@ -455,7 +443,7 @@ writing:
 
     templates: function()
     {
-        this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), 'app', 'templates', 'base.html'));
+        this.indexFile = this.readFileAsString(this.templatePath('app/templates/base.html'));
         this.indexFile = this.engine(this.indexFile, this);
         this.indexFile = this.appendFiles
         (
@@ -478,14 +466,34 @@ install: function()
     {
         var howToInstall = '\nI\'m all done. Follow the rest of the instructions in '+chalk.green.bold('README.md') + ' and you should be all set!';
         this.log(howToInstall);
+
         return;
     }
 
+    // Install npm/bower dependencies.
     this.installDependencies(
     {
         skipMessage: this.options['skip-install-message'],
         skipInstall: this.options['skip-install']
     });
+
+    // Install pip dependencies if virtualenv is enabled.
+    if (process.env.VIRTUAL_ENV)
+    {
+        this.log('\nInstalling pip dependencies...');
+        this.spawnCommand('pip', ['install', '-r', 'requirements.txt']);
+
+        // Add environment variables to virtualenv.
+        var envs = this.readFileAsString(this.destinationPath('.environment')).replace(/(^#.+$)/gm, '').replace(/(^\n)/gm, '');
+        var file = this.destinationPath('bin/activate');
+        var venv = this.readFileAsString(file) + '\n' + envs;
+
+        this.writeFileFromString(venv, file);
+    }
+    else
+    {
+        this.log('\nPlease activate your virtualenv and manually install pip dependencies with ' + chalk.yellow.bold('pip install -r requirements.txt') + '.');
+    }
 
     this.on('end', function()
     {

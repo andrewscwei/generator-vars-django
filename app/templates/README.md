@@ -19,24 +19,24 @@ If you are using Modernizr, add the following to its ```bower.json``` so ```main
 "main": "modernizr.js"
 ```
 
-Initialize virtualenv:
+Initialize ```virtualenv``` if needed:
 ```
 $ virtualenv .
 ```
 
-Add generated environment variables to ```./bin/activate```.
+Add generated environment variables in ```./.environment``` to ```./bin/activate``` if needed.
 
-Activate virtualenv:
+(Re)activate ```virtualenv```:
 ```
 $ source bin/activate
 ```
 
-Install pip dependencies using requirements.txt:
+Install ```pip``` dependencies using ```./requirements.txt``` they are not already installed:
 ```
 $ pip install -r requirements.txt
 ```
 
-Verify pip dependencies installed correctly under virtualenv:
+Verify ```pip``` dependencies installed correctly under ```virtualenv```:
 ```
 $ which django-admin.py
 ```
@@ -56,24 +56,21 @@ $ mysql> create database {db_name};
 $ mysql> quit;
 ```
 
-Update environment variables with new database configs:
-```
-$ nano bin/activate
-```
+Update environment variables in ```./bin/activate``` with new database configs.
 
 Apply initial migration:
 ```
-$ fab migrate
+$ gulp migrate
 ```
 
-Test dev environment. You should see "Hello, World!" in ```localhost:8080```:
+Test dev environment. You should see "Hello, World!":
 ```
-$ fab deploy:dev serve:dev
+$ gulp --debug
 ```
 
-Test prod environment. You should see "Hello, World!" in ```localhost:8080```:
+Test prod environment. You should see "Hello, World!":
 ```
-$ fab deploy serve
+$ gulp
 ```
 
 ## Tasks
@@ -84,19 +81,12 @@ $ fab deploy serve
 
 ```gulp build```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
 
+```gulp serve --debug```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
+
+```gulp serve```: Serves the project in prod environment, begins watching files and automatically rebuilds (fully) and reloads browser when file changes are detected.
+
 See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
 
-### ```fabric```
-
-```fab build:dev```: Builds and deploys static and template files to the ```.tmp``` directory so they are ready to be served using dev settings.
-
-```fab build```: Builds and deploys static, template, and project files to the ```build``` directory so they are ready to be served using prod settings.
-
-```fab serve:dev```: Serves the project in dev environment.
-
-```fab serve```: Serves the project in prod environment.
-
-See ```fabfile.py``` for more tasks.
 
 ## Cloud Setup (Linux)
 

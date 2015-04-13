@@ -23,6 +23,9 @@ var FILE_EXCLUDE_PATTERN = '{psd,ai}';
 // Load modules.
 var $ = require('gulp-load-plugins')();
 var gulp = require('gulp');
+var exec = require('child_process').exec;
+var spawn = require('child_process').spawn;
+var sequence = require('run-sequence');
 
 /**
  * Compresses and deploys images to the temporary directory. Compression is skipped if --debug is specified.
@@ -120,8 +123,15 @@ gulp.task('extras', function()
  */
 gulp.task('static', ['images', 'fonts', 'styles', 'vendors', 'scripts', 'extras'], function()
 {
-    return gulp.src(['<%= paths.tmp %>/static/**/*'])
-        .pipe(gulp.dest('<%= paths.build %>/static'));
+    if ($.util.env['debug'])
+    {
+        return gulp.src(['<%= paths.tmp %>/static/**/*'])
+            .pipe(gulp.dest('<%= paths.build %>/static'));
+    }
+    else
+    {
+        spawn('python', ['<%= paths.src %>/manage.py', 'collectstatic', '--noinput'], { stdio: 'inherit' });
+    }
 });
 
 /**
@@ -144,37 +154,85 @@ gulp.task('clean', require('del').bind(null, ['<%= paths.tmp %>', '<%= paths.bui
  * entire project to the build directory. Note that in production environment
  * 'collectstatic' must be invoked in manage.py to complete deployment.
  */
-gulp.task('build', ['static', 'templates'], function()
+gulp.task('build', function(callback)
+{
+    if ($.util.env['debug'])
+    {
+        sequence('templates', 'static', 'deploy', callback);
+    }
+    else
+    {
+        sequence('clean', 'templates', 'static', 'deploy', callback);
+    }
+});
+
+/**
+ * Deploys project files to the build directory (excluding static and template files).
+ */
+gulp.task('deploy', function()
 {
     return gulp.src(['<%= paths.src %>/**/*', '!<%= paths.src %>/{static,templates}/**/*'])
         .pipe(gulp.dest('<%= paths.build %>'));
 });
 
 /**
- * Watch files for changes.
+ * Runs Django project shell.
  */
-gulp.task('watch', ['styles'], function ()
+gulp.task('shell', function()
+{
+    spawn('python', ['app/manage.py', 'shell'], { stdio: 'inherit' });
+});
+
+/**
+ * Runs Django migration.
+ */
+gulp.task('migrate', function()
+{
+    spawn('python', ['app/manage.py', 'migrate'], { stdio: 'inherit' });
+});
+
+/**
+ * Serves project to localhost. If --debug is specified, files will be served from
+ * the temporary directory (with loose files) instead of the build directory.
+ */
+gulp.task('serve', function()
 {
     var debug = $.util.env['debug'];
     var baseDir = (debug) ? '<%= paths.tmp %>' : '<%= paths.build %>';
+    var browserSync = require('browser-sync');
+
+    if ($.util.env['debug'])
+    {
+        spawn('python', ['app/manage.py', 'runserver', '0.0.0.0:8080', '--insecure'], { stdio: 'inherit' });
+    }
+    else
+    {
+        spawn('python', ['build/manage.py', 'runserver', '0.0.0.0:8080', '--insecure', '--settings=project.settings.prod'], { stdio: 'inherit' });
+    }
+
+    browserSync(
+    {
+        notify: false,
+        proxy: '0.0.0.0:8080'
+    });
 
     // Watch for changes.
     if (debug)
     {
-        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, ['images']);
-        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, ['styles']);
-        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, ['scripts']);
-        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, ['fonts']);
-        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, ['templates']);
-        gulp.watch('bower.json', ['fonts']);
+        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, ['images', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, ['styles', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, ['scripts', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, ['fonts', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, ['templates', browserSync.reload]);
+        gulp.watch('bower.json', ['fonts', browserSync.reload]);
     }
     else
     {
-        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, ['build']);
-        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, ['build']);
-        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, ['build']);
-        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, ['build']);
-        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, ['build']);
+        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, ['build', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, ['build', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, ['build', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, ['build', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, ['build', browserSync.reload]);
         gulp.watch('bower.json', ['build']);
     }
 });
@@ -182,7 +240,7 @@ gulp.task('watch', ['styles'], function ()
 /**
  * Default task.
  */
-gulp.task('default', ['clean'], function()
+gulp.task('default', function(callback)
 {
-    gulp.start('build');
+    sequence('build', 'serve', callback);
 });

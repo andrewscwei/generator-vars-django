@@ -5,13 +5,12 @@ VARIANTE's Yeoman generator for a raw Django web app.
 ## Features
 
 - Django 1.7
-- ```node```
 - ```bower```
-- ```gulp``` setup for compression/minification of static files (i.e. images, CSS, JavaScripts, etc) and tempaltes (i.e. HTML)
-- ```fabric``` setup for dev/prod deployment and various handy manage.py shortcuts
-- Choice from 3 database types: SQLite/MySQL/PostgreSQL
-- Scalable and Modular Architecture for CSS (SMACSS) setup with Sass/Stylus
+- ```gulp``` setup for compression/minification of static files (i.e. images, CSS, JavaScripts) and tempaltes (i.e. HTML), dev/prod deployment and various handy manage.py shortcuts
+- ```browser-sync``` and ```gulp-watch``` working with Django's ```runserver```
 - Browserify
+- Scalable and Modular Architecture for CSS (SMACSS) setup with Sass/Stylus
+- Choice from 3 database types: SQLite/MySQL/PostgreSQL
 - uWSGI and Nginx configurations
 - Sublime project (optional)
 
@@ -27,8 +26,7 @@ VARIANTE's Yeoman generator for a raw Django web app.
 .
 +-- app
 |   +-- project
-|   |   +-- apps
-|   |   |   +-- Django apps
+|   |   +-- apps // Django apps go here
 |   |   +-- settings
 |   |   |   +-- base.py
 |   |   |   +-- dev.py
@@ -55,9 +53,9 @@ VARIANTE's Yeoman generator for a raw Django web app.
 |   +-- templates
 |   |   +-- base.html
 |   |   +-- index.html
+|   |   +-- robots.txt
 |   +-- manage.py
-+-- build
-|   +-- runtime files
++-- build // runtime files go here
 +-- bower_components
 +-- node_modules
 +-- .bowerrc
@@ -65,7 +63,6 @@ VARIANTE's Yeoman generator for a raw Django web app.
 +-- .gitattributes
 +-- .gitignore
 +-- .jshintrc
-+-- fabfile.py
 +-- gulpfile.js
 +-- bower.json
 +-- package.json
@@ -84,19 +81,12 @@ VARIANTE's Yeoman generator for a raw Django web app.
 
 ```gulp build```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
 
+```gulp serve --debug```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
+
+```gulp serve```: Serves the project in prod environment, begins watching files and automatically rebuilds (fully) and reloads browser when file changes are detected.
+
 See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
 
-### ```fabric```
-
-```fab build:dev```: Builds and deploys static and template files to the ```.tmp``` directory so they are ready to be served using dev settings.
-
-```fab build```: Builds and deploys static, template, and project files to the ```build``` directory so they are ready to be served using prod settings.
-
-```fab serve:dev```: Serves the project in dev environment.
-
-```fab serve```: Serves the project in prod environment.
-
-See ```fabfile.py``` for more tasks.
 
 ## Usage
 
@@ -115,9 +105,14 @@ Create a new directory for your project and ```cd``` into it
 mkdir new-project-name && cd $_
 ```
 
+Create ```virtualenv``` and activate it
+```
+virtualenv . && source bin/activate
+```
+
 Generate the project
 ```
-yo vars-django
+yo vars-django [app-name]
 ```
 
 For details on initial setup procedures of the project, see its generated ```README.md``` file.
