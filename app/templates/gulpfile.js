@@ -233,7 +233,7 @@ gulp.task('serve', function()
         gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, ['build', browserSync.reload]);
         gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, ['build', browserSync.reload]);
         gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, ['build', browserSync.reload]);
-        gulp.watch('bower.json', ['build']);
+        gulp.watch('bower.json', ['build', browserSync.reload]);
     }
 });
 
