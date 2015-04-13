@@ -6,7 +6,7 @@ VARIANTE's Yeoman generator for a raw Django web app.
 
 - Django 1.7
 - ```bower```
-- ```gulp``` setup for compression/minification of static files (i.e. images, CSS, JavaScripts) and tempaltes (i.e. HTML), dev/prod deployment and various handy manage.py shortcuts
+- ```gulp``` setup for compression/minification of static files (i.e. images, CSS, JavaScripts) and templates (i.e. HTML), dev/prod deployment and various handy manage.py shortcuts
 - ```browser-sync``` and ```gulp-watch``` working with Django's ```runserver```
 - Browserify
 - Scalable and Modular Architecture for CSS (SMACSS) setup with Sass/Stylus
@@ -90,27 +90,27 @@ See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify``
 
 ## Usage
 
-Install ```yo```
+Install ```yo```:
 ```
 npm install -g yo
 ```
 
-Install ```generator-vars-django```
+Install ```generator-vars-django```:
 ```
 npm install -g generator-vars-django
 ```
 
-Create a new directory for your project and ```cd``` into it
+Create a new directory for your project and ```cd``` into it:
 ```
 mkdir new-project-name && cd $_
 ```
 
-Create ```virtualenv``` and activate it
+Create ```virtualenv``` and activate it:
 ```
 virtualenv . && source bin/activate
 ```
 
-Generate the project
+Generate the project:
 ```
 yo vars-django [app-name]
 ```
