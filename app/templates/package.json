@@ -21,8 +21,6 @@
         "browser-sync": "^2.5.3",
         "browserify": "^9.0.3",
         "del": "^1.1.1",
-        "event-stream": "^3.3.1",
-        "globby": "^2.0.0",
         "gulp": "^3.8.11",
         "gulp-cache": "^0.2.8",
         "gulp-csso": "^1.0.0",
@@ -41,7 +39,6 @@
         "opn": "^1.0.1",
         "reactify": "^1.1.0",
         "run-sequence": "^1.0.2",
-        "vinyl-buffer": "^1.0.0",
-        "vinyl-source-stream": "^1.1.0"
+        "through2": "^0.6.5"
     }
 }

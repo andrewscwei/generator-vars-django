@@ -82,32 +82,24 @@ gulp.task('styles', function()
 gulp.task('scripts', function()
 {
     var browserify = require('browserify');
-    var source = require('vinyl-source-stream');
-    var buffer = require('vinyl-buffer');
-    var globby = require('globby');
     var reactify = require('reactify');
-    var stream = require('event-stream');
+    var through = require('through2');
 
-    return globby(['./<%= paths.src %>/static/**/*.'+SCRIPTS_PATTERN], function(err, files)
-    {
-        var tasks = files.map(function(entry)
+    return gulp.src(['./<%= paths.src %>/static/**/js/*.'+SCRIPTS_PATTERN]) // assuming all bundles reside in the js directory excluding sub-directories
+        .pipe(through.obj(function(file, enc, next)
         {
-            return browserify({
-                entries: [entry],
-                debug: true,
-                transform: [reactify]
-            })
-            .bundle()
-            .pipe(source(entry.replace('<%= paths.src %>/', '')))
-            .pipe(buffer())
-            .pipe($.sourcemaps.init({ loadMaps: true }))
-            .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-uglify'], $.uglify())).on('error', $.util.log)
-            .pipe($.sourcemaps.write('./'))
-            .pipe(gulp.dest('<%= paths.tmp %>'));
-        });
-
-        return stream.merge.apply(null, tasks);
-    });
+            browserify({ entries: [file.path], debug: true, transform: [reactify] })
+                .bundle(function(err, res)
+                {
+                    if (err) console.log(err.toString());
+                    file.contents = res;
+                    next(null, file);
+                });
+        }))
+        .pipe($.sourcemaps.init({ loadMaps: true }))
+        .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-uglify'], $.uglify())).on('error', $.util.log)
+        .pipe($.sourcemaps.write('./'))
+        .pipe(gulp.dest('.<%= paths.tmp %>/static'));
 });
 
 /**
