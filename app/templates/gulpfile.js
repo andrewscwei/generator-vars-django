@@ -57,6 +57,8 @@ gulp.task('fonts', function()
  */
 gulp.task('styles', function()
 {
+var skipCSSO = $.util.env['skip-csso'] || $.util.env['debug'];
+
     return gulp.src('<%= paths.src %>/static/**/*.'+STYLES_PATTERN)
         .pipe($.sourcemaps.init())<% if (includeStylus) { %>
         .pipe($.stylus({
@@ -70,7 +72,7 @@ gulp.task('styles', function()
         }))<% } %>
         .pipe($.postcss([require('autoprefixer-core')({ browsers: ['last 2 version', 'ie 9'] })]))
         .pipe($.sourcemaps.write())
-        .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-csso'], $.csso()))
+        .pipe($.if(!skipCSSO, $.csso()))
         .pipe(gulp.dest('<%= paths.tmp %>/static'));
 });
 
@@ -81,6 +83,8 @@ gulp.task('styles', function()
  */
 gulp.task('scripts', function()
 {
+    var skipUglify = $.util.env['skip-uglify'] || $.util.env['debug'];
+
     var browserify = require('browserify');
     var reactify = require('reactify');
     var through = require('through2');
@@ -99,7 +103,7 @@ gulp.task('scripts', function()
                 });
         }))
         .pipe($.sourcemaps.init({ loadMaps: true }))
-        .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-uglify'], $.uglify())).on('error', $.util.log)
+        .pipe($.if(!skipUglify, $.uglify())).on('error', $.util.log)
         .pipe($.sourcemaps.write('./'))
         .pipe(gulp.dest('.<%= paths.tmp %>/static'));
 });
@@ -109,8 +113,10 @@ gulp.task('scripts', function()
  */
 gulp.task('vendors', function()
 {
+    var skipUglify = $.util.env['skip-uglify'] || $.util.env['debug'];
+
     return gulp.src(require('main-bower-files')({ filter: '**/*.'+SCRIPTS_PATTERN }))
-        .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-uglify'], $.uglify()))
+        .pipe($.if(!skipUglify, $.uglify())).on('error', $.util.log)
         .pipe(gulp.dest('<%= paths.tmp %>/static/js/vendors'));
 });
 
@@ -145,8 +151,10 @@ gulp.task('static', ['images', 'fonts', 'styles', 'vendors', 'scripts', 'extras'
  */
 gulp.task('templates', function()
 {
+    var skipMinifyHTML = $.util.env['skip-minify-html'] || $.util.env['debug'];
+
     return gulp.src(['<%= paths.src %>/templates/**/*.'+TEMPLATES_PATTERN, '<%= paths.src %>/templates/robots.txt'])
-        .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-minify-html'], $.minifyHtml({empty: true, conditionals: true, loose: true })))
+        .pipe($.if(!skipMinifyHTML, $.minifyHtml({empty: true, conditionals: true, loose: true })))
         .pipe(gulp.dest('<%= paths.build %>/templates'));
 });
 
