@@ -86,6 +86,8 @@ gulp.task('scripts', function()
     var through = require('through2');
 
     return gulp.src(['./<%= paths.src %>/static/**/js/*.'+SCRIPTS_PATTERN]) // assuming all bundles reside in the js directory excluding sub-directories
+        .pipe($.jshint())
+        .pipe($.jshint.reporter('jshint-stylish'))
         .pipe(through.obj(function(file, enc, next)
         {
             browserify({ entries: [file.path], debug: true, transform: [reactify] })
@@ -96,8 +98,6 @@ gulp.task('scripts', function()
                     next(null, file);
                 });
         }))
-        .pipe($.jshint())
-        .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.sourcemaps.init({ loadMaps: true }))
         .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-uglify'], $.uglify())).on('error', $.util.log)
         .pipe($.sourcemaps.write('./'))
