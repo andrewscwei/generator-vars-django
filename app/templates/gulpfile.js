@@ -96,6 +96,8 @@ gulp.task('scripts', function()
                     next(null, file);
                 });
         }))
+        .pipe($.jshint())
+        .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.sourcemaps.init({ loadMaps: true }))
         .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-uglify'], $.uglify())).on('error', $.util.log)
         .pipe($.sourcemaps.write('./'))
