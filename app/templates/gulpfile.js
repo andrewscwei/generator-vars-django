@@ -32,8 +32,11 @@ var sequence = require('run-sequence');
  */
 gulp.task('images', function()
 {
+    var debug = $.util.env['debug'] || $.util.env['d'];
+    var skipImageMin = $.util.env['skip-imagemin'] || debug;
+
     return gulp.src(['<%= paths.src %>/static/**/*'+IMAGES_PATTERN])
-        .pipe($.if(!$.util.env['debug'] && !$.util.env['skip-imagemin'], $.imagemin({
+        .pipe($.if(!skipImageMin, $.imagemin({
             progressive: true,
             interlaced: true,
             svgoPlugins: [{cleanupIDs: false}]
@@ -57,7 +60,8 @@ gulp.task('fonts', function()
  */
 gulp.task('styles', function()
 {
-var skipCSSO = $.util.env['skip-csso'] || $.util.env['debug'];
+    var debug = $.util.env['debug'] || $.util.env['d'];
+    var skipCSSO = $.util.env['skip-csso'] || debug;
 
     return gulp.src('<%= paths.src %>/static/**/*.'+STYLES_PATTERN)
         .pipe($.sourcemaps.init())<% if (includeStylus) { %>
@@ -83,7 +87,8 @@ var skipCSSO = $.util.env['skip-csso'] || $.util.env['debug'];
  */
 gulp.task('scripts', function()
 {
-    var skipUglify = $.util.env['skip-uglify'] || $.util.env['debug'];
+    var debug = $.util.env['debug'] || $.util.env['d'];
+    var skipUglify = $.util.env['skip-uglify'] || debug;
 
     var browserify = require('browserify');
     var reactify = require('reactify');
@@ -113,7 +118,8 @@ gulp.task('scripts', function()
  */
 gulp.task('vendors', function()
 {
-    var skipUglify = $.util.env['skip-uglify'] || $.util.env['debug'];
+    var debug = $.util.env['debug'] || $.util.env['d'];
+    var skipUglify = $.util.env['skip-uglify'] || debug;
 
     return gulp.src(require('main-bower-files')({ filter: '**/*.'+SCRIPTS_PATTERN }))
         .pipe($.if(!skipUglify, $.uglify())).on('error', $.util.log)
@@ -151,7 +157,8 @@ gulp.task('static', ['images', 'fonts', 'styles', 'vendors', 'scripts', 'extras'
  */
 gulp.task('templates', function()
 {
-    var skipMinifyHTML = $.util.env['skip-minify-html'] || $.util.env['debug'];
+    var debug = $.util.env['debug'] || $.util.env['d'];
+    var skipMinifyHTML = $.util.env['skip-minify-html'] || debug;
 
     return gulp.src(['<%= paths.src %>/templates/**/*.'+TEMPLATES_PATTERN, '<%= paths.src %>/templates/robots.txt'])
         .pipe($.if(!skipMinifyHTML, $.minifyHtml({empty: true, conditionals: true, loose: true })))
@@ -170,7 +177,9 @@ gulp.task('clean', require('del').bind(null, ['<%= paths.tmp %>', '<%= paths.bui
  */
 gulp.task('build', function(callback)
 {
-    if ($.util.env['debug'])
+    var debug = $.util.env['debug'] || $.util.env['d'];
+
+    if (debug)
     {
         sequence('templates', 'static', 'deploy', callback);
     }
@@ -211,23 +220,26 @@ gulp.task('migrate', function()
  */
 gulp.task('serve', function()
 {
-    var debug = $.util.env['debug'];
+    var debug = $.util.env['debug'] || $.util.env['d'];
+    var port = $.util.env['port'] || $.util.env['p'];
     var baseDir = (debug) ? '<%= paths.tmp %>' : '<%= paths.build %>';
     var browserSync = require('browser-sync');
 
-    if ($.util.env['debug'])
+    port = (typeof port === 'number') ? port : 8080;
+
+    if (debug)
     {
-        spawn('python', ['app/manage.py', 'runserver', '0.0.0.0:8080', '--insecure'], { stdio: 'inherit' });
+        spawn('python', ['app/manage.py', 'runserver', '0.0.0.0:'+port, '--insecure'], { stdio: 'inherit' });
     }
     else
     {
-        spawn('python', ['build/manage.py', 'runserver', '0.0.0.0:8080', '--insecure', '--settings=project.settings.prod'], { stdio: 'inherit' });
+        spawn('python', ['build/manage.py', 'runserver', '0.0.0.0:'+port, '--insecure', '--settings=project.settings.prod'], { stdio: 'inherit' });
     }
 
     browserSync(
     {
         notify: false,
-        proxy: '0.0.0.0:8080'
+        proxy: '0.0.0.0:'+port
     });
 
     // Watch for changes.
@@ -256,5 +268,12 @@ gulp.task('serve', function()
  */
 gulp.task('default', function(callback)
 {
-    sequence('build', 'serve', callback);
+    var debug = $.util.env['debug'] || $.util.env['d'];
+    var serve = $.util.env['serve'] || $.util.env['s'];
+
+    var seq = (debug) ? ['build'] : ['clean', 'build'];
+    if (serve) seq.push('serve');
+    seq.push(callback);
+
+    sequence.apply(null, seq);
 });
