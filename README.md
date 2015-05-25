@@ -18,7 +18,7 @@ VARIANTE's Yeoman generator for a raw Django web app.
 - Bootstrap (optional)
 - jQuery (optional)
 
-If you are looking for [Modernizr](http://modernizr.com), we recommend manually configuring your custom build and put it in ```app/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %} in your HTML.
+If you are looking for [Modernizr](http://modernizr.com), we recommend manually configuring your custom build and put it in ```app/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %}``` in your HTML.
 
 ## Structure
 
