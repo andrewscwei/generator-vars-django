@@ -9,11 +9,6 @@ Install node modules if they are not already installed:
 $ npm install
 ```
 
-Install bower components if they are not already installed:
-```
-$ bower install
-```
-
 Initialize ```virtualenv``` if needed:
 ```
 $ virtualenv .
@@ -242,7 +237,6 @@ Visit external IP of your VM instance. Voila.
 ## Common Issues
 
 1. If Nginx cannot serve the project (getting a 500 Internal Error or something like that), check the error logs at ```/var/log/nginx/error.log```.
-2. If Modernizr is not being deployed, you will need to add ```"main": "modernizr.js"``` to its ```bower.json``` so that ```main-bower-files``` can pick it up.
 
 ## License
 
