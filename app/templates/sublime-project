@@ -28,8 +28,7 @@
                 "lib",
                 "<%= paths.build %>",
                 "<%= paths.tmp %>",
-                "node_modules",
-                "bower_components"
+                "node_modules"
             ],
             "follow_symlinks": true,
             "path": "."
