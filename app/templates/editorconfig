@@ -23,7 +23,3 @@ trim_trailing_whitespace = false
 [package.json]
 indent_style = space
 indent_size = 4
-
-[bower.json]
-indent_style = space
-indent_size = 4

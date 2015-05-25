@@ -2,9 +2,6 @@
 <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
 (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
 
-This software is released under the MIT License:
-http://www.opensource.org/licenses/mit-license.php
-
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
 
@@ -49,13 +46,13 @@ MIDDLEWARE_CLASSES = (
 )
 
 # Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases<% if (includeSQLite) {%>
+# https://docs.djangoproject.com/en/1.7/ref/settings/#databases<% if (database == 'SQLite') {%>
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-}<% } else if (includePostgreSQL) {%>
+}<% } else if (database == 'PostgreSQL') {%>
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -65,7 +62,7 @@ DATABASES = {
         'HOST': os.environ['DJANGO_DB_HOST'],
         'PORT': os.environ['DJANGO_DB_PORT'],
     }
-}<% } else if (includeMySQL) { %>
+}<% } else if (database == 'MySQL') { %>
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

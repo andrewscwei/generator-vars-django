@@ -4,21 +4,21 @@ VARIANTE's Yeoman generator for a raw Django web app.
 
 ## Features
 
-- Django 1.7
-- ```bower```
-- ```gulp``` setup for compression/minification of static files (i.e. images, CSS, JavaScripts) and templates (i.e. HTML), dev/prod deployment and various handy manage.py shortcuts
-- ```browser-sync``` and ```gulp-watch``` working with Django's ```runserver```
-- Browserify
-- Scalable and Modular Architecture for CSS (SMACSS) setup with Sass/Stylus
+- [Django 1.7](https://www.djangoproject.com)
+- [Gulp](http://gulpjs.com) setup for compression/minification of static files (i.e. images, CSS, JavaScripts) and templates (i.e. HTML), dev/prod deployment and various handy manage.py shortcuts
+- [BrowserSync](http://www.browsersync.io) for rapid development
+- [Browserify](http://browserify.org)
+- [Sass](http://sass-lang.com)/[Stylus](https://learnboost.github.io/stylus/) with Scalable and Modular Architecture (SMACSS) setup
 - Choice from 3 database types: SQLite/MySQL/PostgreSQL
-- uWSGI and Nginx configurations
-- Sublime project (optional)
+- [uWSGI](https://uwsgi-docs.readthedocs.org/en/latest/) and [Nginx](http://wiki.nginx.org/Main) configurations
+- [Sublime](http://www.sublimetext.com) project (optional)
 
 ## Libraries
 
 - Bootstrap (optional)
-- Modernizr (optional)
-- jQuery
+- jQuery (optional)
+
+If you are looking for [Modernizr](http://modernizr.com), we recommend manually configuring your custom build and put it in ```app/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %} in your HTML.
 
 ## Structure
 
@@ -43,6 +43,7 @@ VARIANTE's Yeoman generator for a raw Django web app.
 |   |   |   +-- components
 |   |   |   +-- modules
 |   |   |   +-- main.{scss/styl}
+|   |   +-- vendor // vendor css/js files go here
 |   |   +-- apple-touch-icon-57x57.png
 |   |   +-- apple-touch-icon-72x72.png
 |   |   +-- apple-touch-icon-114x114.png
@@ -56,15 +57,12 @@ VARIANTE's Yeoman generator for a raw Django web app.
 |   |   +-- robots.txt
 |   +-- manage.py
 +-- build // runtime files go here
-+-- bower_components
 +-- node_modules
-+-- .bowerrc
 +-- .editorconfig
 +-- .gitattributes
 +-- .gitignore
 +-- .jshintrc
 +-- gulpfile.js
-+-- bower.json
 +-- package.json
 +-- uwsgi_params
 +-- project_name_nginx.conf

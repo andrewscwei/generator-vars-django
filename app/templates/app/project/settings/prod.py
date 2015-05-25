@@ -2,9 +2,6 @@
 <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
 (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
 
-This software is released under the MIT License:
-http://www.opensource.org/licenses/mit-license.php
-
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
 

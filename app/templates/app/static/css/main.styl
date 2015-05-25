@@ -1,12 +1,9 @@
 /**
  *  <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
  *  (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
- *
- *  This software is released under the MIT License:
- *  http://www.opensource.org/licenses/mit-license.php
  */<% if (includeBootstrap) { %>
 
-@import '../../bower_components/bootstrap/dist/css/bootstrap.css'<% } %>
+@import '../../../node_modules/bootstrap/dist/css/bootstrap.css'<% } %>
 
 @import 'base/normalize'
 @import 'base/typography'

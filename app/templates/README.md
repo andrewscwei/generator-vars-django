@@ -14,11 +14,6 @@ Install bower components if they are not already installed:
 $ bower install
 ```
 
-If you are using Modernizr, add the following to its ```bower.json``` so ```main-bower-files``` can pick it up:
-```
-"main": "modernizr.js"
-```
-
 Initialize ```virtualenv``` if needed:
 ```
 $ virtualenv .
