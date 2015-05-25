@@ -15,9 +15,8 @@ var SCRIPTS_PATTERN = 'js';
 var STYLES_PATTERN = <% if (css == 'Stylus') { %>'{css,styl}'<% } else if (css == 'Sass') { %>'{css,scss}'<% } else { %>'css'<% } %>;
 var SOURCEMAPS_PATTERN = '{css.map,js.map}';
 var TEMPLATES_PATTERN = '{html,shtml,htm,html.erb,asp,php}';
-var EXTRAS_PATTERN = '{txt,htaccess}';
+var EXTRAS_PATTERN = 'txt';
 var FONTS_PATTERN = '{eot,svg,ttf,woff,woff2}';
-var FILE_EXCLUDE_PATTERN = '{psd,ai}';
 
 // Load modules.
 var $ = require('gulp-load-plugins')();
@@ -37,6 +36,9 @@ var skipRev = function() { return $.util.env['skip-rev'] || $.util.env['sr'] || 
 
 /**
  * Compresses and deploys images to the temporary directory. Compression is skipped if --debug is specified.
+ *
+ * @param {Boolean} --debug         Specifies debug environment, skipping image compression.
+ * @param {Boolean} --skip-imagemin Skips image compression.
  */
 gulp.task('images', function()
 {
@@ -46,6 +48,15 @@ gulp.task('images', function()
             interlaced: true,
             svgoPlugins: [{cleanupIDs: false}]
         })))
+        .pipe(gulp.dest('<%= paths.tmp %>/static'));
+});
+
+/**
+ * Deploys videos to the staging directory.
+ */
+gulp.task('videos', function()
+{
+    return gulp.src(['<%= paths.src %>/static/**/*'+VIDEOS_PATTERN])
         .pipe(gulp.dest('<%= paths.tmp %>/static'));
 });
 
@@ -62,6 +73,9 @@ gulp.task('fonts', function()
  * Processes all CSS files if preprocessed CSS languages are used (i.e. Stylus, Sass). Copies the processed
  * files to a temporary directory to be iterated on in subsequent tasks. If --debug is specified, minification
  * will be skipped.
+ *
+ * @param {Boolean} --debug     Specifies debug environment, skipping CSS compression.
+ * @param {Boolean} --skip-csso Skips CSS compression.
  */
 gulp.task('styles', function()
 {
@@ -93,6 +107,9 @@ gulp.task('styles', function()
  * Processes and lints all JavaScript files. If Browserify is included this task will bundle up all associated files. Processed
  * JavaScript files are copied to a temporary directory to be iterated on in subsequent tasks. If --debug is specified, uglification
  * will be skipped.
+ *
+ * @param {Boolean} --debug         Specifies debug environment, skipping JavaScript compression.
+ * @param {Boolean} --skip-uglify   Skips JavaScript compression.
  */
 gulp.task('scripts', function()
 {
@@ -138,12 +155,15 @@ gulp.task('extras', function()
 /**
  * Processes all static files (i.e. images, fonts, stylesheets, scripts, etc) and deploys them to the build
  * directory.
+ *
+ * @param {Boolean} --debug Specifies debug environment for immediate and child tasks, skipping revisioning and
+ *                          subsequent asset compressions.
  */
-gulp.task('static', ['images', 'fonts', 'styles', 'scripts', 'extras'], function(callback)
+gulp.task('static', ['images', 'videos', 'fonts', 'styles', 'scripts', 'extras'], function(callback)
 {
     if (debug())
     {
-        gulp.src(['<%= paths.tmp %>/static/**/*'])
+        gulp.src(['<%= paths.tmp %>/static/**/*'], { dot: true })
             .pipe(gulp.dest('<%= paths.build %>/static'));
 
         callback();
@@ -166,6 +186,9 @@ gulp.task('static', ['images', 'fonts', 'styles', 'scripts', 'extras'], function
 
 /**
  * Processes all template files (i.e. HTML, etc) and deploys them to the temporary directory.
+ *
+ * @param {Boolean} --debug             Specifies debug environment, skipping HTML compression.
+ * @param {Boolean} --skip-minify-html  Skips HTML compression.
  */
 gulp.task('templates', function()
 {
@@ -177,12 +200,20 @@ gulp.task('templates', function()
 /**
  * Cleans the build directory.
  */
-gulp.task('clean', require('del').bind(null, ['<%= paths.tmp %>', '<%= paths.build %>']));
+gulp.task('clean', function(callback)
+{
+    require('del')(['<%= paths.tmp %>', '<%= paths.build %>'], function()
+    {
+        $.cache.clearAll(callback);
+    });
+});
 
 /**
  * Builds the project including static files and templates and deploys the
  * entire project to the build directory. Note that in production environment
  * 'collectstatic' must be invoked in manage.py to complete deployment.
+ *
+ * @param {Boolean} --debug Specifies debug environment, skipping all sorts of static file compression.
  */
 gulp.task('build', function(callback)
 {
@@ -192,7 +223,7 @@ gulp.task('build', function(callback)
     }
     else
     {
-        sequence('clean', 'templates', 'static', 'deploy', callback);
+        sequence('templates', 'static', 'deploy', callback);
     }
 });
 
@@ -224,11 +255,15 @@ gulp.task('migrate', function()
 /**
  * Serves project to localhost. If --debug is specified, files will be served from
  * the temporary directory (with loose files) instead of the build directory.
+ *
+ * @param {Boolean} --debug Serve files from the staging directory (loose files), defaults
+ *                          to false (serve from production directory).
+ * @param {Number}  --port  Optional port number (defaults to 8080).
  */
 gulp.task('serve', function()
 {
     var port = $.util.env['port'] || $.util.env['p'];
-    var baseDir = (debug) ? '<%= paths.tmp %>' : '<%= paths.build %>';
+    var baseDir = (debug()) ? '<%= paths.tmp %>' : '<%= paths.build %>';
     var browserSync = require('browser-sync');
 
     port = (typeof port === 'number') ? port : 8080;
@@ -248,29 +283,33 @@ gulp.task('serve', function()
         proxy: '0.0.0.0:'+port
     });
 
-    // Watch for changes.
     if (debug())
     {
-        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, ['images', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, ['styles', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, ['scripts', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, ['fonts', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, ['templates', browserSync.reload]);
-        gulp.watch('bower.json', ['fonts', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, function() { sequence('images', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+VIDEOS_PATTERN, function() { sequence('videos', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, function() { sequence('styles', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, function() { sequence('scripts', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, function() { sequence('fonts', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, function() { sequence('templates', browserSync.reload); });
     }
     else
     {
-        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, ['build', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, ['build', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, ['build', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, ['build', browserSync.reload]);
-        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, ['build', browserSync.reload]);
-        gulp.watch('bower.json', ['build', browserSync.reload]);
+        gulp.watch('<%= paths.src %>/**/*.'+IMAGES_PATTERN, function() { sequence('build', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+VIDEOS_PATTERN, function() { sequence('build', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+STYLES_PATTERN, function() { sequence('build', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+SCRIPTS_PATTERN, function() { sequence('build', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+FONTS_PATTERN, function() { sequence('build', browserSync.reload); });
+        gulp.watch('<%= paths.src %>/**/*.'+TEMPLATES_PATTERN, function() { sequence('build', browserSync.reload); });
     }
 });
 
 /**
- * Default task.
+ * Default task. Cleans the generated directories and builds the project.
+ *
+ * @param {Boolean} --debug Specifies debug environment, meaning all sub-tasks will be
+ *                          iterated in this environment.
+ * @param {Boolean} --serve Specifies whether the site should be served at the end of
+ *                          this task.
  */
 gulp.task('default', function(callback)
 {

@@ -2,7 +2,7 @@
     "build_systems":
     [
         {
-            "cmd": ["gulp"],
+            "cmd": ["gulp", "--debug"],
             "name": "Gulp",
             "path": "/usr/local/bin",
             "working_dir": "<%= '${project_path}' %>"
@@ -18,7 +18,7 @@
                 ".editorconfig",
                 ".gitattributes",
                 ".Python",
-                ".secretkey"
+                ".environment"
             ],
             "folder_exclude_patterns":
             [

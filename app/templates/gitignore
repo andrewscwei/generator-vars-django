@@ -11,3 +11,4 @@ pip-selfcheck.json
 *.pyc
 *.sublime-project
 *.sublime-workspace
+npm-debug.log
