@@ -270,11 +270,11 @@ gulp.task('serve', function()
 
     if (debug())
     {
-        spawn('python', ['app/manage.py', 'runserver', '0.0.0.0:'+port, '--insecure'], { stdio: 'inherit' });
+        spawn('python', ['<%= paths.src %>/manage.py', 'runserver', '0.0.0.0:'+port, '--insecure'], { stdio: 'inherit' });
     }
     else
     {
-        spawn('python', ['build/manage.py', 'runserver', '0.0.0.0:'+port, '--insecure', '--settings=project.settings.prod'], { stdio: 'inherit' });
+        spawn('python', ['<%= paths.build %>/manage.py', 'runserver', '0.0.0.0:'+port, '--insecure', '--settings=project.settings.prod'], { stdio: 'inherit' });
     }
 
     browserSync(
