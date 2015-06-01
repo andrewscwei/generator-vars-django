@@ -101,56 +101,14 @@ Yes, replace ```sysvinit```
 
 ### Installing ```nvm```/```node```/```npm``` Globally
 
-Install dependencies:
+Install ```nvm``` (see [https://github.com/xtuple/nvm](https://github.com/xtuple/nvm)):
 ```
-$ sudo apt-get install build-essential openssl libssl-dev curl
-```
-
-Clone ```nvm``` repo:
-```
-$ sudo git clone https://github.com/creationix/nvm.git /opt/nvm
-```
-
-Create directories where ```nvm``` and ```node``` will be globally installed to:
-```
-$ sudo mkdir /usr/local/nvm
-$ sudo mkdir /usr/local/node
-```
-
-Change the permissions of the newly created directories so you can write to it when you install ```node```:
-```
-$ sudo chown -R your_admin_user_name /usr/local/nvm
-$ sudo chmod -R 775 /usr/local/nvm
-$ sudo chown -R your_admin_user_name /usr/local/node
-$ sudo chmod -R 775 /usr/local/node
-```
-
-Create ```nvm.sh``` to be executed everytime the shell loads up:
-```
-$ sudo touch /etc/profile.d/nvm.sh
-```
-
-Add the following to ```nvm.sh```:
-```
-export NVM_DIR=/usr/local/nvm
-source /opt/nvm/nvm.sh
-export NPM_CONFIG_PREFIX=/usr/local/node
-export PATH="/usr/local/node/bin:$PATH"
-```
-
-Log out and log back in or ```source``` the file so changes can take effect:
-```
-$ source /etc/profile.d/nvm.sh
+$ sudo wget -qO- https://raw.githubusercontent.com/xtuple/nvm/master/install.sh | sudo bash
 ```
 
 Install preferred ```node``` version:
 ```
 $ nvm install x.xx.x
-```
-
-Set ```node``` version as default so shell can remember it the next time you log in:
-```
-$ nvm alias default x.xx.x
 ```
 
 ### Installing ```python```/```pip```
