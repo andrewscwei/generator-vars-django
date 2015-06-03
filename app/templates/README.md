@@ -33,9 +33,10 @@ $ which django-admin.py
 
 Configure PostgreSQL if needed:
 ```
-$ sudo su - postgres
-$ createuser --interactive -P
+$ sudo su postgres
+$ createuser -P
 $ createdb --owner username dbname
+$ exit
 ```
 
 Configure MySQL if needed:
@@ -55,21 +56,21 @@ $ gulp migrate
 
 Test dev environment. You should see "Hello, World!":
 ```
-$ gulp --debug
+$ gulp --debug --serve
 ```
 
 Test prod environment. You should see "Hello, World!":
 ```
-$ gulp
+$ gulp --serve
 ```
 
 ## Tasks
 
 ### ```gulp```
 
-```gulp build --debug```: Builds all static and template files in the ```app``` directory but skips all compression tasks. Built files are stored in the ```.tmp``` directory.
+```gulp --debug```: Builds all static and template files in the ```app``` directory but skips all compression tasks. Built files are stored in the ```.tmp``` directory.
 
-```gulp build```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
+```gulp```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
 
 ```gulp serve --debug```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
 
@@ -99,7 +100,7 @@ $ sudo apt-get install upstart
 ```
 Yes, replace ```sysvinit```
 
-### Installing ```nvm```/```node```/```npm``` Globally
+### Installing ```nvm``` Globally
 
 Install ```nvm``` (see [https://github.com/xtuple/nvm](https://github.com/xtuple/nvm)):
 ```
@@ -170,7 +171,7 @@ $ sudo ln -s /path/to/your/<%= appname %>_uwsgi.ini /etc/uwsgi/vassals/
 
 Run uWSGI in emperor mode:
 ```
-$ uwsgi --emperor /etc/uwsgi/vassals --uid www-data --gid www-data
+$ uwsgi --emperor /etc/uwsgi/vassals
 ```
 
 Make uWSGI startup when the system boots using ```upstart```:
@@ -192,9 +193,17 @@ end script
 
 Visit external IP of your VM instance. Voila.
 
+## Optional Environment Variables
+
+1. `DJANGO_CONFIG_DEBUG`: You can set this to any string you want in `bin/activate` of your `virtualenv`. This will force `gulp` command to build the app in debug, which is useful when you have different environment setup in the cloud.
+
 ## Common Issues
 
 1. If Nginx cannot serve the project (getting a 500 Internal Error or something like that), check the error logs at ```/var/log/nginx/error.log```.
+
+2. If you get an error about permission issues with writing to the UDP socket upon starting the uWSGI emperor, you might need to change the owner of the project directory to the Nginx owner/group, which is probably `www-data:www-data`
+
+3. If you are getting a 400 error, you can debug this using your browser console to see what is wrong. If you get a GET request fail on the domain itself, chances are you forgot to add your domain to the ALLOWED_HOSTS of your Django project settings.
 
 ## License
 
