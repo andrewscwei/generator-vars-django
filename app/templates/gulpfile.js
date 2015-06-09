@@ -263,7 +263,7 @@ gulp.task('migrate', function()
 gulp.task('serve', function()
 {
     var port = $.util.env['port'] || $.util.env['p'];
-    var baseDir = (debug()) ? '<%= paths.tmp %>' : '<%= paths.build %>';
+    var baseDir = '<%= paths.build %>';
     var browserSync = require('browser-sync');
 
     port = (typeof port === 'number') ? port : 8080;

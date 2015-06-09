@@ -399,26 +399,28 @@ module.exports = yeoman.generators.Base.extend
                     this.log('\nSkipping pip dependency installation. You will have to manually run ' + chalk.yellow.bold('pip install -r requirements.txt') + '.');
                     done();
                 }
-
-                if (process.env.VIRTUAL_ENV)
-                {
-                    this.log('\nInstalling pip dependencies...');
-                    this.spawnCommand('pip', ['install', '-r', 'requirements.txt']).on('exit', function()
-                    {
-                        // Add environment variables to virtualenv.
-                        var envs = this.readFileAsString(this.destinationPath('.environment')).replace(/(^#.+$)/gm, '').replace(/(^\n)/gm, '');
-                        var file = this.destinationPath('bin/activate');
-                        var venv = this.readFileAsString(file) + '\n' + envs;
-
-                        this.writeFileFromString(venv, file);
-
-                        done();
-                    }.bind(this));
-                }
                 else
                 {
-                    this.log('\n' + chalk.red('Pip dependencies are not installed because there is no virtualenv detected. Please create/activate your virtualenv and manually install pip dependencies with ') + chalk.yellow.bold('pip install -r requirements.txt') + '.');
-                    done();
+                    if (process.env.VIRTUAL_ENV)
+                    {
+                        this.log('\nInstalling pip dependencies...');
+                        this.spawnCommand('pip', ['install', '-r', 'requirements.txt']).on('exit', function()
+                        {
+                            // Add environment variables to virtualenv.
+                            var envs = this.readFileAsString(this.destinationPath('.environment')).replace(/(^#.+$)/gm, '').replace(/(^\n)/gm, '');
+                            var file = this.destinationPath('bin/activate');
+                            var venv = this.readFileAsString(file) + '\n' + envs;
+
+                            this.writeFileFromString(venv, file);
+
+                            done();
+                        }.bind(this));
+                    }
+                    else
+                    {
+                        this.log('\n' + chalk.red('Pip dependencies are not installed because there is no virtualenv detected. Please create/activate your virtualenv and manually install pip dependencies with ') + chalk.yellow.bold('pip install -r requirements.txt') + '.');
+                        done();
+                    }
                 }
             },
 
@@ -431,17 +433,19 @@ module.exports = yeoman.generators.Base.extend
                     this.log('\nSkipping node dependency installation. You will have to manually run ' + chalk.yellow.bold('npm install') + '.');
                     done();
                 }
-
-                this.log('\nInstalling node modules for you using your ' + chalk.yellow.bold('package.json') + '...');
-                this.spawnCommand('npm', ['install', '--ignore-scripts']).on('exit', function(code)
+                else
                 {
-                    if (code !== 0)
+                    this.log('\nInstalling node modules for you using your ' + chalk.yellow.bold('package.json') + '...');
+                    this.spawnCommand('npm', ['install', '--ignore-scripts']).on('exit', function(code)
                     {
-                        this.log('\n' + chalk.red('Installation failed. Please manually run ') + chalk.yellow.bold('npm install') + chalk.red('.'));
-                    }
+                        if (code !== 0)
+                        {
+                            this.log('\n' + chalk.red('Installation failed. Please manually run ') + chalk.yellow.bold('npm install') + chalk.red('.'));
+                        }
 
-                    done();
-                }.bind(this));
+                        done();
+                    }.bind(this));
+                }
             }
         },
 
