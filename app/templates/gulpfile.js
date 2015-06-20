@@ -32,7 +32,6 @@ var skipCSSO = function() { return $.util.env['skip-csso'] || $.util.env['sc'] |
 var skipUglify = function() { return $.util.env['skip-uglify'] || $.util.env['sj'] || debug(); };
 var skipRev = function() { return $.util.env['skip-rev'] || $.util.env['sr'] || debug(); };
 var skipMinifyHTML = function() { return $.util.env['skip-minify-html'] || $.util.env['sh'] || debug(); };
-var skipRev = function() { return $.util.env['skip-rev'] || $.util.env['sr'] || debug(); };
 
 /**
  * Compresses and deploys images to the temporary directory. Compression is skipped if --debug is specified.
