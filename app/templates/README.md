@@ -11,14 +11,14 @@ $ npm install
 
 Initialize ```virtualenv``` if needed:
 ```
-$ virtualenv .
+$ virtualenv {path}
 ```
 
-Add generated environment variables in ```./.environment``` to ```./bin/activate``` if needed.
+Add generated environment variables in ```./.environment``` to ```{virtualenv_path}/bin/activate``` if needed.
 
 (Re)activate ```virtualenv```:
 ```
-$ source bin/activate
+$ source {virtualenv_path}/bin/activate
 ```
 
 Install ```pip``` dependencies using ```./requirements.txt``` they are not already installed:
@@ -47,7 +47,7 @@ $ mysql> create database {db_name};
 $ mysql> quit;
 ```
 
-Update environment variables in ```./bin/activate``` with new database configs.
+Update environment variables in ```{virtualenv_path}/bin/activate``` with new database configs.
 
 Apply initial migration:
 ```
@@ -68,13 +68,13 @@ $ gulp --serve
 
 ### ```gulp```
 
-```gulp --debug```: Builds all static and template files in the ```app``` directory but skips all compression tasks. Built files are stored in the ```.tmp``` directory.
+```gulp --debug```: Builds all static and template files in the ```<%= paths.src %>``` directory but skips all compression tasks. Built files are stored in the ```<%= paths.tmp %>``` directory.
 
-```gulp```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
+```gulp```: Builds all static and template fies in the ```<%= paths.src %>``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```<%= paths.build %>``` directory.
 
-```gulp serve --debug```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
+```gulp serve --debug --watch```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
 
-```gulp serve```: Serves the project in prod environment, begins watching files and automatically rebuilds (fully) and reloads browser when file changes are detected.
+```gulp serve```: Serves the project in prod environment.
 
 See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
 
@@ -186,7 +186,7 @@ start on runlevel [2345]
 stop on runlevel [!2345]
 
 script
-    . /path/to/virtualenv/bin/activate
+    . {virtualenv_path}/bin/activate
     uwsgi --emperor /etc/uwsgi/vassals
 end script
 ```

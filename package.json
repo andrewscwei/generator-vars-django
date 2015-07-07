@@ -1,7 +1,7 @@
 {
     "name": "generator-vars-django",
-    "version": "0.5.11",
-    "description": "Django web app + Gulp, Fabric, Browserify, Sass/Stylus and more.",
+    "version": "1.0.0",
+    "description": "Django web app + Gulp, Browserify, Babel, Sass/Stylus and more.",
     "license": "MIT",
     "repository":
     {
@@ -12,6 +12,7 @@
     {
         "name": "Andrew Wei <andrew@variante.io>"
     },
+    "homepage": "https://github.com/VARIANTE/generator-vars-django#readme",
     "main": "app/index.js",
     "engines":
     {
@@ -39,6 +40,8 @@
         "stylus",
         "sass",
         "browserify",
+        "babel",
+        "babelify",
         "browser-sync",
         "smacss",
         "django",

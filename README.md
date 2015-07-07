@@ -8,17 +8,18 @@ VARIANTE's Yeoman generator for a raw Django web app.
 - [Gulp](http://gulpjs.com) setup for compression/minification of static files (i.e. images, CSS, JavaScripts) and templates (i.e. HTML), dev/prod deployment and various handy manage.py shortcuts
 - [BrowserSync](http://www.browsersync.io) for rapid development
 - [Browserify](http://browserify.org)
+- [Babel](https://babeljs.io) for coding in ES6 standards
+- Watchify for quick Browserify rebundling
 - [Sass](http://sass-lang.com)/[Stylus](https://learnboost.github.io/stylus/) with Scalable and Modular Architecture (SMACSS) setup
 - Choice from 3 database types: SQLite/MySQL/PostgreSQL
 - [uWSGI](https://uwsgi-docs.readthedocs.org/en/latest/) and [Nginx](http://wiki.nginx.org/Main) configurations
-- [Sublime](http://www.sublimetext.com) project (optional)
 
 ## Libraries
 
 - Bootstrap (optional)
 - jQuery (optional)
 
-For [Modernizr](http://modernizr.com), manually configure your custom build and put it in ```app/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %}``` in your HTML.
+For [Modernizr](http://modernizr.com), manually configure your custom build and put it in ```<%= paths.src %>/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %}``` in your HTML.
 
 ## Structure
 
@@ -58,30 +59,47 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 |   +-- manage.py
 +-- build // runtime files go here
 +-- node_modules
++-- tasks
+|   +-- build.js
+|   +-- clean.js
+|   +-- config.js
+|   +-- deploy.js
+|   +-- extras.js
+|   +-- fonts.js
+|   +-- images.js
+|   +-- migrate.js
+|   +-- scripts.js
+|   +-- serve.js
+|   +-- shell.js
+|   +-- static.js
+|   +-- styles.js
+|   +-- templates.js
+|   +-- videos.js
++-- .buildpacks
 +-- .editorconfig
 +-- .gitattributes
 +-- .gitignore
 +-- .jshintrc
 +-- gulpfile.js
 +-- package.json
-+-- uwsgi_params
 +-- project_name_nginx.conf
 +-- project_name_uwsgi.ini
-+-- requirements.txt
 +-- README.md
++-- requirements.txt
++-- uwsgi_params
 ```
 
 ## Tasks
 
 ### ```gulp```
 
-```gulp --debug```: Builds all static and template files in the ```app``` directory but skips all compression tasks. Built files are stored in the ```.tmp``` directory.
+```gulp --debug```: Builds all static and template files in the ```<%= paths.src %>``` directory but skips all compression tasks. Built files are stored in the ```<%= paths.tmp %>``` directory.
 
-```gulp```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
+```gulp```: Builds all static and template fies in the ```<%= paths.src %>``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```<%= paths.build %>``` directory.
 
-```gulp serve --debug```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
+```gulp serve --debug --watch```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
 
-```gulp serve```: Serves the project in prod environment, begins watching files and automatically rebuilds (fully) and reloads browser when file changes are detected.
+```gulp serve```: Serves the project in prod environment.
 
 See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
 
@@ -105,7 +123,7 @@ mkdir new-project-name && cd $_
 
 Create ```virtualenv``` and activate it:
 ```
-virtualenv . && source bin/activate
+virtualenv {path} && source {virtualenv_path}/bin/activate
 ```
 
 Generate the project:

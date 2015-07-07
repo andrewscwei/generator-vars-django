@@ -42,12 +42,6 @@ module.exports = yeoman.generators.Base.extend
                 desc: 'Skips the installation of dependencies',
                 type: Boolean
             });
-
-            this.option('skip-install-message',
-            {
-                desc: 'Skips the message after the installation of dependencies',
-                type: Boolean
-            });
         },
 
         initializing: function()
@@ -75,7 +69,8 @@ module.exports = yeoman.generators.Base.extend
 
                 if (!process.env.VIRTUAL_ENV)
                 {
-                    this.log(chalk.yellow('\nWARNING: ') + 'You are not in a Python virtual environment. It is strongly recommended that you create one and activate it before running this generator.\n');
+                    this.log(chalk.yellow('\nWARNING: ') + 'You are not in a Python virtual environment. Please activate your Python environment before using this generator.');
+                    return;
                 }
 
                 var prompts =
@@ -190,12 +185,7 @@ module.exports = yeoman.generators.Base.extend
                                 name: 'jQuery',
                                 value: 'includejQuery',
                                 checked: false
-                            },
-                            {
-                                name: 'Sublime',
-                                value: 'includeSublime',
-                                checked: true
-                            },
+                            }
                         ]
                     }
                 ];
@@ -211,7 +201,6 @@ module.exports = yeoman.generators.Base.extend
 
                     this.includeBootstrap = hasFeature('includeBootstrap');
                     this.includejQuery = hasFeature('includejQuery');
-                    this.includeSublime = hasFeature('includeSublime');
 
                     done();
                 }.bind(this));
@@ -220,95 +209,37 @@ module.exports = yeoman.generators.Base.extend
 
         writing:
         {
-            /**
-             * Generates sublime project if feature is selected.
-             */
-            sublime: function()
+            config: function()
             {
-                if (this.includeSublime)
-                {
-                    this.template('sublime-project', this.appname + '.sublime-project');
-                }
-            },
-
-            /**
-             * Generates gulpfile.js.
-             */
-            gulpfile: function()
-            {
-                this.template('gulpfile.js');
-            },
-
-            /**
-             * Generates package.json.
-             * @return {[type]} [description]
-             */
-            package: function()
-            {
-                this.template('package.json', 'package.json');
-            },
-
-            /**
-             * Generates Git repo config files.
-             */
-            git: function()
-            {
+                this.copy('buildpacks', '.buildpacks');
                 this.copy('gitignore', '.gitignore');
                 this.copy('gitattributes', '.gitattributes');
-            },
-
-            /**
-             * Generates pip dependency requirements.
-             */
-            pip: function()
-            {
                 this.copy('requirements.txt', 'requirements.txt');
-            },
+                this.copy('jshintrc', '.jshintrc');
+                this.copy('editorconfig', '.editorconfig');
+                this.copy('README.md', 'README.md');
 
-            /**
-             * Generates .environment (stores environment variables, i.e. Django secret key).
-             */
-            bashProfile: function()
-            {
+                this.template('gulpfile.js');
+                this.template('tasks/build.js');
+                this.template('tasks/clean.js');
+                this.template('tasks/config.js');
+                this.template('tasks/deploy.js');
+                this.template('tasks/extras.js');
+                this.template('tasks/fonts.js');
+                this.template('tasks/images.js');
+                this.template('tasks/migrate.js');
+                this.template('tasks/scripts.js');
+                this.template('tasks/serve.js');
+                this.template('tasks/shell.js');
+                this.template('tasks/static.js');
+                this.template('tasks/styles.js');
+                this.template('tasks/templates.js');
+                this.template('tasks/videos.js');
+                this.template('package.json', 'package.json');
                 this.template('environment', '.environment');
-            },
-
-            /**
-             * Generates uWSGI config files.
-             */
-            uwsgi: function()
-            {
                 this.template('uwsgi_params', 'uwsgi_params');
                 this.template('uwsgi.ini', this.appname+'_uwsgi.ini');
-            },
-
-            /**
-             * Generates Nginx config files.
-             */
-            nginx: function()
-            {
                 this.template('nginx.conf', this.appname+'_nginx.conf');
-            },
-
-            /**
-             * Generates jshint config file.
-             */
-            jshint: function()
-            {
-                this.copy('jshintrc', '.jshintrc');
-            },
-
-            /**
-             * Generates editor config file.
-             */
-            editorConfig: function()
-            {
-                this.copy('editorconfig', '.editorconfig');
-            },
-
-            readme: function()
-            {
-                this.copy('README.md', 'README.md');
             },
 
             app: function()
@@ -385,6 +316,20 @@ module.exports = yeoman.generators.Base.extend
                         sourceFileList: ['js/main.js']
                     }
                 );
+            },
+
+            test: function()
+            {
+                this.composeWith(this.options['test-framework'] + ':app',
+                {
+                    options:
+                    {
+                        'skip-install': this.options['skip-install']
+                    }
+                },
+                {
+                    local: require.resolve('generator-mocha/generators/app/index.js')
+                });
             }
         },
 
@@ -396,14 +341,14 @@ module.exports = yeoman.generators.Base.extend
 
                 if (this.options['skip-install'])
                 {
-                    this.log('\nSkipping pip dependency installation. You will have to manually run ' + chalk.yellow.bold('pip install -r requirements.txt') + '.');
+                    this.log('Skipping pip dependency installation. You will have to manually run ' + chalk.yellow.bold('pip install -r requirements.txt') + '.');
                     done();
                 }
                 else
                 {
                     if (process.env.VIRTUAL_ENV)
                     {
-                        this.log('\nInstalling pip dependencies...');
+                        this.log(chalk.magenta('Installing pip dependencies...'));
                         this.spawnCommand('pip', ['install', '-r', 'requirements.txt']).on('exit', function()
                         {
                             // Add environment variables to virtualenv.
@@ -418,7 +363,7 @@ module.exports = yeoman.generators.Base.extend
                     }
                     else
                     {
-                        this.log('\n' + chalk.red('Pip dependencies are not installed because there is no virtualenv detected. Please create/activate your virtualenv and manually install pip dependencies with ') + chalk.yellow.bold('pip install -r requirements.txt') + '.');
+                        this.log(chalk.red('Pip dependencies are not installed because there is no virtualenv detected. Please create/activate your virtualenv and manually install pip dependencies with ') + chalk.yellow.bold('pip install -r requirements.txt') + '.');
                         done();
                     }
                 }
@@ -426,48 +371,25 @@ module.exports = yeoman.generators.Base.extend
 
             npm: function()
             {
-                var done = this.async();
-
                 if (this.options['skip-install'])
                 {
-                    this.log('\nSkipping node dependency installation. You will have to manually run ' + chalk.yellow.bold('npm install') + '.');
-                    done();
+                    this.log('Skipping node dependency installation. You will have to manually run ' + chalk.yellow.bold('npm install') + '.');
                 }
                 else
                 {
-                    this.log('\nInstalling node modules for you using your ' + chalk.yellow.bold('package.json') + '...');
-                    this.spawnCommand('npm', ['install', '--ignore-scripts']).on('exit', function(code)
-                    {
-                        if (code !== 0)
-                        {
-                            this.log('\n' + chalk.red('Installation failed. Please manually run ') + chalk.yellow.bold('npm install') + chalk.red('.'));
-                        }
+                    this.log(chalk.magenta('Installing node modules for you using your ') + chalk.yellow.bold('package.json') + chalk.magenta('...'));
 
-                        done();
-                    }.bind(this));
+                    this.installDependencies({
+                      skipMessage: true,
+                      bower: false
+                    });
                 }
             }
         },
 
         end: function()
         {
-            if (this.options['skip-install'])
-            {
-                this.log('\nI\'m all done. Follow the rest of the instructions in '+chalk.green.bold('README.md') + ' and you should be all set!');
-                return;
-            }
-
-            // Ideally we should use composeWith, but we're invoking it here
-            // because generator-mocha is changing the working directory
-            // https://github.com/yeoman/generator-mocha/issues/28.
-            this.invoke(this.options['test-framework'],
-            {
-                options:
-                {
-                    'skip-message': this.options['skip-install-message'],
-                    'skip-install': this.options['skip-install']
-                }
-            });
+            this.log(chalk.green('Finished generating app! Reactivate your virtual environment to load the new environment variables.'));
         }
     }
 );
