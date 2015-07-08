@@ -47,8 +47,8 @@ gulp.task('serve', function()
         gulp.watch(config.paths.src+'/**/*.'+config.patterns.images, function() { sequence('images', browserSync.reload); });
         gulp.watch(config.paths.src+'/**/*.'+config.patterns.videos, function() { sequence('videos', browserSync.reload); });
         gulp.watch(config.paths.src+'/**/*.'+config.patterns.styles, function() { sequence('styles', browserSync.reload); });
-        gulp.watch(config.paths.src+'/**/*.'+config.patterns.scripts, function() { sequence('scripts', browserSync.reload); });
         gulp.watch(config.paths.src+'/**/*.'+config.patterns.fonts, function() { sequence('fonts', browserSync.reload); });
         gulp.watch(config.paths.src+'/**/*.'+config.patterns.templates, function() { sequence('templates', browserSync.reload); });
+        gulp.watch(config.paths.tmp+'/**/*.'+config.patterns.scripts, function() { sequence(browserSync.reload); });
     }
 });
