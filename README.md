@@ -19,7 +19,7 @@ VARIANTE's Yeoman generator for a raw Django web app.
 - Bootstrap (optional)
 - jQuery (optional)
 
-For [Modernizr](http://modernizr.com), manually configure your custom build and put it in ```<%= paths.src %>/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %}``` in your HTML.
+For [Modernizr](http://modernizr.com), manually configure your custom build and put it in ```app/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %}``` in your HTML.
 
 ## Structure
 
@@ -93,9 +93,9 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 
 ### ```gulp```
 
-```gulp --debug```: Builds all static and template files in the ```<%= paths.src %>``` directory but skips all compression tasks. Built files are stored in the ```<%= paths.tmp %>``` directory.
+```gulp --debug```: Builds all static and template files in the ```app``` directory but skips all compression tasks. Built files are stored in the ```.tmp``` directory.
 
-```gulp```: Builds all static and template fies in the ```<%= paths.src %>``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```<%= paths.build %>``` directory.
+```gulp```: Builds all static and template fies in the ```app``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```build``` directory.
 
 ```gulp serve --debug --watch```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
 
