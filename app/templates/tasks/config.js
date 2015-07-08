@@ -127,6 +127,7 @@ module.exports =
     skipImageMin: skipImageMin,
     skipCSSO: skipCSSO,
     skipUglify: skipUglify,
+    skipMinifyHTML: skipMinifyHTML,
     watch: watch,
     port: port,
     serve: serve
