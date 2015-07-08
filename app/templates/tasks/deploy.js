@@ -12,5 +12,5 @@ var gulp = require('gulp');
 gulp.task('deploy', function()
 {
     return gulp.src([config.paths.src+'/**/*', '!'+config.paths.src+'/{static,templates}/**/*'])
-        .pipe(gulp.dest(config.paths.build+''));
+        .pipe(gulp.dest(config.paths.build));
 });

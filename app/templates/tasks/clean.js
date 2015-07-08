@@ -11,7 +11,7 @@ var gulp = require('gulp');
 
 gulp.task('clean', function(callback)
 {
-    require('del')([config.paths.tmp+'', config.paths.build+''], function()
+    require('del')([config.paths.tmp, config.paths.build], function()
     {
         callback();
     });
