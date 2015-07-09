@@ -26,7 +26,7 @@ gulp.task('styles', function()
 {
     return merge
     (
-        gulp.src(config.paths.src+'/static/css/**/*.'+config.patterns.styles)
+        gulp.src(config.paths.src+'/static/**/css/*.'+config.patterns.styles)
             .pipe($if(config.env.debug, $sourcemaps.init()))<% if (css == 'Stylus') { %>
             .pipe($stylus({
                 'include css': true
@@ -48,7 +48,7 @@ gulp.task('styles', function()
             .pipe($postcss([autoprefixer({ browsers: ['last 2 version', 'ie 9'] })]))
             .pipe($if(config.env.debug, $sourcemaps.write()))
             .pipe($if(!config.env.skipCSSO, $csso()))
-            .pipe(gulp.dest(config.paths.tmp+'/static/css')),
+            .pipe(gulp.dest(config.paths.tmp+'/static')),
         gulp.src([config.paths.src+'/static/vendor/**/*.css'])
             .pipe($concat('vendor.css'))
             .pipe($if(!config.env.skipCSSO, $csso()))

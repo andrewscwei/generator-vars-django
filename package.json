@@ -1,6 +1,6 @@
 {
     "name": "generator-vars-django",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Django web app + Gulp, Browserify, Babel, Sass/Stylus and more.",
     "license": "MIT",
     "repository":
