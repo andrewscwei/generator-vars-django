@@ -1,18 +1,17 @@
-/* jshint strict:false */
 /**
- *  <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
- *  (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
- *
- *  Cleans /<%= paths.tmp %> and /<%= paths.build %> directories.
+ * <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
+ * (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
  */
 
-var config = require('./config');
+var config = require('./.taskconfig');
+var del = require('del');
 var gulp = require('gulp');
 
-gulp.task('clean', function(callback)
-{
-    require('del')([config.paths.tmp, config.paths.build], function()
-    {
-        callback();
-    });
+/**
+ * Cleans /<%= paths.tmp %> and /<%= paths.build %> directories.
+ */
+gulp.task('clean', function(callback) {
+  del(config.clean.entry).then(function(paths) {
+    callback();
+  });
 });

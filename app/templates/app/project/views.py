@@ -14,8 +14,8 @@ from django.template import RequestContext
 
 # Index request.
 def index(request):
-    return render(request, 'index.html')
+  return render(request, 'index.html')
 
 # 404 error request.
 def error404(request):
-    return render(request, '404.html')
+  return render(request, '404.html')

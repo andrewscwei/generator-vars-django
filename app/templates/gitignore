@@ -1,14 +1,12 @@
 node_modules
-include
-bin
-lib
-<%= paths.build %>
-<%= paths.tmp %>
+/include
+/bin
+/lib
+/<%= paths.build %>
+/<%= paths.tmp %>
 pip-selfcheck.json
 .environment
 .DS_STORE
 .Python
 *.pyc
-*.sublime-project
-*.sublime-workspace
 npm-debug.log

@@ -25,7 +25,13 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 
 ```
 .
++-- .buildpacks
++-- .editorconfig
++-- .gitattributes
++-- .gitignore
++-- .jshintrc
 +-- app
+|   +-- .jshintrc
 |   +-- project
 |   |   +-- apps // Django apps go here
 |   |   +-- settings
@@ -37,21 +43,25 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 |   |   +-- wsgi.py
 |   +-- static
 |   |   +-- img
+|   |   |   +-- apple-touch-icon-57x57.png
+|   |   |   +-- apple-touch-icon-72x72.png
+|   |   |   +-- apple-touch-icon-114x114.png
+|   |   |   +-- apple-touch-icon.png
+|   |   |   +-- favico.png
+|   |   |   +-- og-image.png
 |   |   +-- js
 |   |   |   +-- main.js
 |   |   +-- css
 |   |   |   +-- base
+|   |   |   |   +-- definition.{scss/styl}
+|   |   |   |   +-- layout.{scss/styl}
+|   |   |   |   +-- normalize.{scss/styl}
+|   |   |   |   +-- typography.{scss/styl}
 |   |   |   +-- components
 |   |   |   +-- modules
 |   |   |   +-- main.{scss/styl}
 |   |   +-- vendor // vendor css/js files go here
-|   |   +-- apple-touch-icon-57x57.png
-|   |   +-- apple-touch-icon-72x72.png
-|   |   +-- apple-touch-icon-114x114.png
-|   |   +-- apple-touch-icon.png
 |   |   +-- favico.ico
-|   |   +-- favico.png
-|   |   +-- og-image.png
 |   +-- templates
 |   |   +-- base.html
 |   |   +-- index.html
@@ -60,26 +70,12 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 +-- build // runtime files go here
 +-- node_modules
 +-- tasks
+|   +-- .jshintrc
+|   +-- .taskconfig
 |   +-- build.js
 |   +-- clean.js
-|   +-- config.js
-|   +-- deploy.js
-|   +-- extras.js
-|   +-- fonts.js
-|   +-- images.js
-|   +-- migrate.js
-|   +-- scripts.js
+|   +-- commands.js
 |   +-- serve.js
-|   +-- shell.js
-|   +-- static.js
-|   +-- styles.js
-|   +-- templates.js
-|   +-- videos.js
-+-- .buildpacks
-+-- .editorconfig
-+-- .gitattributes
-+-- .gitignore
-+-- .jshintrc
 +-- gulpfile.js
 +-- package.json
 +-- project_name_nginx.conf
@@ -101,7 +97,7 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 
 ```gulp serve```: Serves the project in prod environment.
 
-See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
+See ```tasks/.taskconfig``` for more tasks and custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
 
 
 ## Usage
@@ -132,6 +128,18 @@ yo vars-django [app-name]
 ```
 
 For details on initial setup procedures of the project, see its generated ```README.md``` file.
+
+## Release Notes
+
+### 2.0.0
+1. Updated version numbers of NPM package dependencies.
+2. Gulp tasks are now compressed into fewer files. As a result `require-dir` dependency is no longer necessary and is removed from `package.json`.
+3. Task configurations are now stored in `./tasks/.taskconfig`.
+4. `favicon.png`, Apple touch and Open Graph specific icons are now moved to `app/static/img`. `favicon.ico` remains in the static directory root.
+5. `gulp-imagemin` is removed because it is the most taxing task in the Gulp pipeline. Images should be optimized outside of the Gulp pipeline instead.
+6. Removed `mocha`. It was never intended as a default test framework for a Django project. 
+7. Minor syntactic sugar changes.
+8. Lots of optimizations, particularly boosting the efficiency of automated rebuilds during development.
 
 ## License
 

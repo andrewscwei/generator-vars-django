@@ -76,7 +76,7 @@ $ gulp --serve
 
 ```gulp serve```: Serves the project in prod environment.
 
-See ```gulpfile.js``` for more tasks and custom flags such as ```--skip-uglify```, ```--skip-csso```, etc.
+See ```./tasks/.taskconfig``` for more tasks and custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
 
 
 ## Cloud Setup (Linux)
@@ -204,6 +204,8 @@ Visit external IP of your VM instance. Voila.
 2. If you get an error about permission issues with writing to the UDP socket upon starting the uWSGI emperor, you might need to change the owner of the project directory to the Nginx owner/group, which is probably `www-data:www-data`
 
 3. If you are getting a 400 error, you can debug this using your browser console to see what is wrong. If you get a GET request fail on the domain itself, chances are you forgot to add your domain to the ALLOWED_HOSTS of your Django project settings.
+
+4. If you are getting a 500 error, enable DEBUG in project/settings/prod.py. It could be something trivial.
 
 ## License
 

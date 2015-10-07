@@ -21,7 +21,7 @@ ALLOWED_HOSTS = ['*']
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS += (
-    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+  'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Default file storage class to be used for any file-related operations that don't specify a particular storage system.

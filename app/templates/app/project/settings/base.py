@@ -26,51 +26,51 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Installed apps.
 INSTALLED_APPS = (
-    # 'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+  # 'django.contrib.admin',
+  'django.contrib.auth',
+  'django.contrib.contenttypes',
+  'django.contrib.sessions',
+  'django.contrib.messages',
+  'django.contrib.staticfiles',
 )
 
 # Middleware classes.
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+  'django.contrib.sessions.middleware.SessionMiddleware',
+  'django.middleware.common.CommonMiddleware',
+  'django.middleware.csrf.CsrfViewMiddleware',
+  'django.contrib.auth.middleware.AuthenticationMiddleware',
+  'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+  'django.contrib.messages.middleware.MessageMiddleware',
+  'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases<% if (database == 'SQLite') {%>
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+  }
 }<% } else if (database == 'PostgreSQL') {%>
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['DJANGO_DB_NAME'],
-        'USER': os.environ['DJANGO_DB_USER'],
-        'PASSWORD': os.environ['DJANGO_DB_PASS'],
-        'HOST': os.environ['DJANGO_DB_HOST'],
-        'PORT': os.environ['DJANGO_DB_PORT'],
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': os.environ['DJANGO_DB_NAME'],
+    'USER': os.environ['DJANGO_DB_USER'],
+    'PASSWORD': os.environ['DJANGO_DB_PASS'],
+    'HOST': os.environ['DJANGO_DB_HOST'],
+    'PORT': os.environ['DJANGO_DB_PORT'],
+  }
 }<% } else if (database == 'MySQL') { %>
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': os.environ['DJANGO_DB_USER'],
-        'PASSWORD': os.environ['DJANGO_DB_PASS'],
-        'HOST': os.environ['DJANGO_DB_HOST'],
-        'PORT': os.environ['DJANGO_DB_PORT'],
-    }
+  'default': {
+    'ENGINE': 'django.db.backends.mysql',
+    'USER': os.environ['DJANGO_DB_USER'],
+    'PASSWORD': os.environ['DJANGO_DB_PASS'],
+    'HOST': os.environ['DJANGO_DB_HOST'],
+    'PORT': os.environ['DJANGO_DB_PORT'],
+  }
 }<% } %>
 
 # Language code for this installation. All choices can be found here:
@@ -110,8 +110,8 @@ STATIC_URL = '/static/'
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+  'django.contrib.staticfiles.finders.FileSystemFinder',
+  'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
 # The file storage engine to use when collecting static files with the collectstatic management command.
@@ -133,25 +133,25 @@ TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
+  'version': 1,
+  'disable_existing_loggers': False,
+  'filters': {
+    'require_debug_false': {
+      '()': 'django.utils.log.RequireDebugFalse'
     }
+  },
+  'handlers': {
+    'mail_admins': {
+      'level': 'ERROR',
+      'filters': ['require_debug_false'],
+      'class': 'django.utils.log.AdminEmailHandler'
+    }
+  },
+  'loggers': {
+    'django.request': {
+      'handlers': ['mail_admins'],
+      'level': 'ERROR',
+      'propagate': True,
+      },
+  }
 }
