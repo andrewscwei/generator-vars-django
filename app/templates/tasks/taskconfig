@@ -181,7 +181,6 @@ var build = {
 var serve = {
   browserSync: {
     files: (debug) ? [paths.tmp] : [paths.build],
-    browser: 'google chrome',
     notify: false,
     proxy: '0.0.0.0:3000',
     port: (typeof port === 'number') ? env.port : 9000
