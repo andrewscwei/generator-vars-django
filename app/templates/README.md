@@ -66,17 +66,11 @@ $ gulp --serve
 
 ## Tasks
 
-### ```gulp```
+```gulp --debug --watch --serve```: Compiles all source files, serves the site and watches for file changes. Best used during development.
 
-```gulp --debug```: Builds all static and template files in the ```<%= paths.src %>``` directory but skips all compression tasks. Built files are stored in the ```<%= paths.tmp %>``` directory.
+```gulp```: Builds the entire project in production.
 
-```gulp```: Builds all static and template fies in the ```<%= paths.src %>``` directory with asset compression such as CSS/HTML/JavaScript minification and deploys them to the ```<%= paths.build %>``` directory.
-
-```gulp serve --debug --watch```: Serves the project in dev environment, begins watching files and automatically rebuilds and reloads browser when file changes are detected. It is recommended to use this environment during development to minimize build time.
-
-```gulp serve```: Serves the project in prod environment.
-
-See ```./tasks/.taskconfig``` for more tasks and custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
+All tasks are broken into micro-tasks, check out the ```tasks``` folder for more details. Also see ```tasks/.taskconfig``` for more custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
 
 
 ## Cloud Setup (Linux)
