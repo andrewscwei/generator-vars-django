@@ -1,6 +1,6 @@
 {
   "name": "generator-vars-django",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Generator for Django app + Gulp, Browserify, Babel, Sass/Stylus and more.",
   "license": "MIT",
   "repository": {
@@ -44,10 +44,6 @@
     "chalk": "^1.0.0",
     "yeoman-generator": "^0.18.10",
     "yosay": "^1.0.3"
-  },
-  "peerDependencies": {
-    "yo": ">=1.4.6",
-    "gulp": ">=3.8.11"
   },
   "readmeFilename": "README.md"
 }
