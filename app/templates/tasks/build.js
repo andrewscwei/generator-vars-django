@@ -1,7 +1,5 @@
-/**
- * <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
- * (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
- */
+<% if (appauthor !== '') { %>// (c) <%= appauthor %>
+<% } %>
 
 var autoprefixer = require('autoprefixer-core');
 var babelify = require('babelify');
@@ -28,50 +26,36 @@ var $sourcemaps = require('gulp-sourcemaps');
 var $uglify = require('gulp-uglify');
 var $util = require('gulp-util');
 
-/**
- * Compiles and deploys images.
- *
- * @param {Boolean} debug
- */
 gulp.task('images', function() {
   return gulp.src(config.images.entry)
-    .pipe($size({
-      title: '[images]',
-      gzip: true
-    }))
+    .pipe($size({ title: '[images]', gzip: true }))
     .pipe(gulp.dest(config.images.output));
 });
 
-/**
- * Compiles and deploys videos.
- */
 gulp.task('videos', function() {
   return gulp.src(config.videos.entry)
-    .pipe($size({
-      title: '[videos]',
-      gzip: true
-    }))
+    .pipe($size({ title: '[videos]', gzip: true }))
     .pipe(gulp.dest(config.videos.output));
 });
 
-/**
- * Compiles and deploys fonts.
- */
 gulp.task('fonts', function() {
   return gulp.src(config.fonts.entry)
-    .pipe($size({
-      title: '[fonts]',
-      gzip: true
-    }))
+    .pipe($size({ title: '[fonts]', gzip: true }))
     .pipe(gulp.dest(config.fonts.output));
 });
+
+gulp.task('extras', function() {
+  return gulp.src(config.extras.entry)
+    .pipe($size({ title: '[extras]', gzip: true }))
+    .pipe(gulp.dest(config.extras.output));
+})
 
 /**
  * Compiles and deploys stylesheets.
  *
- * @param {Boolean} css-sourcemaps
- * @param {Boolean} debug
- * @param {Boolean} skip-css-min
+ * @param {boolean} css-sourcemaps
+ * @param {boolean} debug
+ * @param {boolean} skip-css-min
  */
 gulp.task('styles', function() {
   return merge(
@@ -109,10 +93,10 @@ gulp.task('styles', function() {
  * and ignores all sub-directories. Watchify is used to speed up the rebundling process when watch is enabled.
  * Babelify is used to allow development in ES6 standards.
  *
- * @param {Boolean} debug
- * @param {Boolean} js-sourcemaps
- * @param {Boolean} skip-js-min
- * @param {Boolean} watch
+ * @param {boolean} debug
+ * @param {boolean} js-sourcemaps
+ * @param {boolean} skip-js-min
+ * @param {boolean} watch
  */
 gulp.task('scripts', function() {
   function bundle(bundler, output, next) {
@@ -188,20 +172,20 @@ gulp.task('core', function() {
 /**
  * Processes all static files (i.e. images, stylesheets, scripts, etc) and deploys them.
  *
- * @param {Boolean} css-sourcemaps
- * @param {Boolean} debug
- * @param {Boolean} js-sourcemaps
- * @param {Boolean} skip-css-min
- * @param {Boolean} skip-js-min
- * @param {Boolean} watch
+ * @param {boolean} css-sourcemaps
+ * @param {boolean} debug
+ * @param {boolean} js-sourcemaps
+ * @param {boolean} skip-css-min
+ * @param {boolean} skip-js-min
+ * @param {boolean} watch
  */
-gulp.task('static', ['images', 'videos', 'fonts', 'styles', 'scripts']);
+gulp.task('static', ['images', 'videos', 'fonts', 'extras', 'styles', 'scripts']);
 
 /**
  * Processes all template files (i.e. HTML) and deploys them.
  *
- * @param {Boolean} debug
- * @param {Boolean} skip-html-min
+ * @param {boolean} debug
+ * @param {boolean} skip-html-min
  */
 gulp.task('templates', function() {
   return gulp.src(config.templates.entry)
@@ -217,7 +201,7 @@ gulp.task('templates', function() {
  * Builds the entire app with option to apply revisioning (via Django's
  * 'collectstatic' command).
  *
- * @param {Boolean} debug
+ * @param {boolean} debug
  */
 gulp.task('build', ['core', 'templates', 'static'], function(done) {
   if (!config.debug) {

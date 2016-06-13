@@ -1,20 +1,26 @@
+"""<% if (appauthor !== '') { %>
+(c) <%= appauthor %><% } %>
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/1.9/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.conf.urls import url, include
+    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-<%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
-(c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
 
-For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
-"""
-
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
 from django.contrib import admin
 from django.views.generic.base import TemplateView
+import project.views
 
-urlpatterns = patterns('',
+urlpatterns = [
   url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
-  # url(r'^admin/', include(admin.site.urls)),
-  url(r'^$', 'project.views.index', name='index'),
-)
+  url(r'^admin/', admin.site.urls),
+  url(r'^$', project.views.index),
+]

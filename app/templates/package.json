@@ -1,5 +1,5 @@
 {
-  "name": "<%= _.slugify(appname) %>",
+  "name": "<%= appname %>",
   "version": "0.0.0",
   "private": true,
   "repository": {},
@@ -7,10 +7,15 @@
     "node": ">=0.12.0",
     "npm": ">=2.7.3"
   },
-  "dependencies": {<% if (includeBootstrap) { %><% if (css == 'Sass') { %>
-    "bootstrap-sass": "~3.3.4"<% } else { %>
-    "bootstrap": "~3.3.4"<% } %><% } %><% if (includeBootstrap && includejQuery) { %>,<% } %><% if (includejQuery) { %>
-    "jquery": "~2.1.x"<% } %>
+  "scripts": {
+    "clean": "gulp clean",
+    "migrate": "python app/manage.py migrate",
+    "build:dev": "gulp --debug",
+    "build": "gulp",
+    "dev": "npm run build:dev -- --watch --serve",
+    "prod": "npm run build -- --serve"
+  },
+  "dependencies": {
   },
   "devDependencies": {
     "autoprefixer-core": "^6.0.1",

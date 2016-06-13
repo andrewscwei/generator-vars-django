@@ -1,7 +1,5 @@
-/**
- * <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
- * (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
- */
+<% if (appauthor !== '') { %>// (c) <%= appauthor %>
+<% } %>
 
 var path = require('path');
 var $env = require('gulp-util').env;
@@ -10,7 +8,7 @@ var $env = require('gulp-util').env;
  * Specifies whether a task should be executed in the debug environment. Tasks may perform differently
  * when running in debug (namely skipping compression processes).
  *
- * @type {Boolean}  --debug, --d, NODE_ENV = 'development' in env, GULP_CONFIG_DEBUG is present in env
+ * @type {boolean}  --debug, --d, NODE_ENV = 'development' in env, GULP_CONFIG_DEBUG is present in env
  */
 var debug = $env['debug'] || $env['d'] || process.env.NODE_ENV === 'development' || process.env.GULP_CONFIG_DEBUG;
 
@@ -18,17 +16,17 @@ var debug = $env['debug'] || $env['d'] || process.env.NODE_ENV === 'development'
  * Supported options specified through CLI params when executing Gulp tasks. Note that if debug is true,
  * all 'skip-' flags are default to true.
  *
- * @type {Boolean}  --css-sourcemaps, --csm Specifies whether the pipeline will generate sourcemaps for CSS files.
- * @type {Boolean}  --js-sourcemaps, --jsm  Specifies whether the pipeline will generate sourcemaps for JS files.
- * @type {Number}   --port, --p             Specifies the port which BrowserSync will use when serving the app locally. Note
+ * @type {boolean}  --css-sourcemaps, --csm Specifies whether the pipeline will generate sourcemaps for CSS files.
+ * @type {boolean}  --js-sourcemaps, --jsm  Specifies whether the pipeline will generate sourcemaps for JS files.
+ * @type {number}   --port, --p             Specifies the port which BrowserSync will use when serving the app locally. Note
  *                                         that this value only affects the port that BrowserSync uses, not WEBrick (Rails server).
  *                                         This option is only available if you are executing a Gulp task that serves the app.
  *                                         The default value is 9000.
- * @type {Boolean}  --skip-css-min, --sc    Specifies whether CSS minification should be skipped.
- * @type {Boolean}  --skip-html-min, --sh   Specifies whether HTML minification should be skipped.
- * @type {Boolean}  --skip-js-min, --sj     Specifies whether JavaScript uglification should be skipped.
- * @type {Boolean}  --serve, --s            Specifies whether the app will be served at the end of designated tasks.
- * @type {Boolean}  --watch, --w            Specifies whether files should be watched. This option is only available
+ * @type {boolean}  --skip-css-min, --sc    Specifies whether CSS minification should be skipped.
+ * @type {boolean}  --skip-html-min, --sh   Specifies whether HTML minification should be skipped.
+ * @type {boolean}  --skip-js-min, --sj     Specifies whether JavaScript uglification should be skipped.
+ * @type {boolean}  --serve, --s            Specifies whether the app will be served at the end of designated tasks.
+ * @type {boolean}  --watch, --w            Specifies whether files should be watched. This option is only available
  *                                         in designated tasks. When enabled, modified files will automatically be pipelined
  *                                         into their corresponding compile tasks and will trigger a browser refresh on
  *                                         complete.
@@ -79,16 +77,16 @@ var clean = {
  * Configuration for the 'images' task.
  */
 var images = {
-  entry: path.join(paths.src, 'static', '**', '*.' + patterns.images),
-  output: path.join(paths.tmp, 'static')
+  entry: path.join(paths.src, 'static', 'images', '**', '*.' + patterns.images),
+  output: path.join(paths.tmp, 'static', 'images')
 };
 
 /**
  * Configuration for the 'videos' task.
  */
 var videos = {
-  entry: path.join(paths.src, 'static', '**', '*.' + patterns.videos),
-  output: path.join(paths.tmp, 'static')
+  entry: path.join(paths.src, 'static', 'videos', '**', '*.' + patterns.videos),
+  output: path.join(paths.tmp, 'static', 'images')
 };
 
 /**
@@ -96,10 +94,16 @@ var videos = {
  */
 var fonts = {
   entry: [
-    path.join(paths.src, 'static', '**', '*.' + patterns.fonts)<% if (includeBootstrap) { %><% if (css == 'Sass') { %>,
-    path.join(__dirname, '../', 'node_modules/bootstrap-sass/assets', '**', '*.' + patterns.fonts)<% } else { %>,
-    path.join(__dirname, '../', 'node_modules/bootstrap/dist', '**', '*.' + patterns.fonts)<% } %><% } %>
+    path.join(paths.src, 'static', 'fonts', '**', '*.' + patterns.fonts)
   ],
+  output: path.join(paths.tmp, 'static', 'fonts')
+};
+
+/**
+ * Configuration for the 'extras' task.
+ */
+var extras = {
+  entry: path.join(paths.src, 'static', '*'),
   output: path.join(paths.tmp, 'static')
 };
 
@@ -115,19 +119,19 @@ var core = {
  * Configuration for the 'styles' task.
  */
 var styles = {
-  entry: path.join(paths.src, 'static', '**', 'css', '*.' + patterns.styles),<% if (css == 'Stylus') { %>
+  entry: path.join(paths.src, 'static', '**', 'stylesheets', '*.' + patterns.styles),<% if (css == 'Stylus') { %>
   stylus: {
     'include css': true,
     include: [
       path.join(__dirname, '../', 'node_modules'),
-      path.join(paths.src, 'static', 'css')
+      path.join(paths.src, 'static', 'stylesheets')
     ]
   },<% } else if (css == 'Sass') { %>
   sass: {
     outputStyle: 'nested',
     includePaths: [
       path.join(__dirname, '../', 'node_modules'),
-      path.join(paths.src, 'static', 'css')
+      path.join(paths.src, 'static', 'stylesheets')
     ],
   },<% } %>
   autoprefixer: {
@@ -143,7 +147,7 @@ var styles = {
  * Configuration for the 'scripts' task.
  */
 var scripts = {
-  entry: path.join(paths.src, 'static', '**', 'js', '*.' + patterns.scripts),
+  entry: path.join(paths.src, 'static', '**', 'javascripts', '*.' + patterns.scripts),
   output: path.join(paths.tmp, 'static'),
   vendorFileName: 'vendor.js',
   vendorEntry: path.join(paths.src, 'static', 'vendor', '**', '*.' + patterns.scripts),
@@ -168,11 +172,7 @@ var templates = {
  */
 var build = {
   entry: path.join(paths.build, '**', '*'),
-  output: paths.build,
-  revAll: {
-    dontGlobal: [/favicon.*$/g, /og-image.*$/g, /rev-manifest.*$/g],
-    dontRenameFile: patterns.templates.replace(/\{|\}/g, '').replace(/^/g, '.').replace(/\,/g, ',.').split(',')
-  }
+  output: paths.build
 };
 
 /**
@@ -183,6 +183,7 @@ var serve = {
     files: (debug) ? [paths.tmp] : [paths.build],
     notify: false,
     proxy: '0.0.0.0:3000',
+    open: false,
     port: (typeof port === 'number') ? env.port : 9000
   }
 };
@@ -221,6 +222,7 @@ module.exports = {
   images: images,
   videos: videos,
   fonts: fonts,
+  extras: extras,
   core: core,
   styles: styles,
   scripts: scripts,

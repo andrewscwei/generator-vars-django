@@ -5,7 +5,8 @@ node_modules
 /<%= paths.build %>
 /<%= paths.tmp %>
 pip-selfcheck.json
-.environment
+!.keep
+.secrets
 .DS_STORE
 .Python
 *.pyc

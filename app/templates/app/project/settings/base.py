@@ -1,12 +1,10 @@
-"""
-<%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
-(c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
-
+"""<% if (appauthor !== '') { %>
+(c) <%= appauthor %><% } %>
 For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
+https://docs.djangoproject.com/en/1.9/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
+https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
@@ -26,7 +24,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # Installed apps.
 INSTALLED_APPS = (
-  # 'django.contrib.admin',
+  'django.contrib.admin',
   'django.contrib.auth',
   'django.contrib.contenttypes',
   'django.contrib.sessions',
@@ -36,6 +34,7 @@ INSTALLED_APPS = (
 
 # Middleware classes.
 MIDDLEWARE_CLASSES = (
+  'django.middleware.security.SecurityMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.middleware.common.CommonMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
@@ -118,14 +117,21 @@ STATICFILES_FINDERS = (
 # https://docs.djangoproject.com/en/1.7/ref/settings/#std:setting-STATICFILES_STORAGE
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-# A tuple of callables that are used to populate the context in RequestContext.
-# https://docs.djangoproject.com/en/1.7/ref/settings/#std:setting-TEMPLATE_CONTEXT_PROCESSORS
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS
-
-# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-# Always use forward slashes, even on Windows.
-# Don't forget to use absolute paths, not relative paths.
-TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
+TEMPLATES = [
+  {
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [os.path.join(BASE_DIR, 'templates')],
+    'APP_DIRS': False,
+    'OPTIONS': {
+      'context_processors': [
+        'django.template.context_processors.debug',
+        'django.template.context_processors.request',
+        'django.contrib.auth.context_processors.auth',
+        'django.contrib.messages.context_processors.messages',
+      ],
+    },
+  },
+]
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

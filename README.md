@@ -50,16 +50,9 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 |   |   |   +-- favico.png
 |   |   |   +-- og-image.png
 |   |   +-- js
-|   |   |   +-- main.js
+|   |   |   +-- application.js
 |   |   +-- css
-|   |   |   +-- base
-|   |   |   |   +-- definition.{scss/styl}
-|   |   |   |   +-- layout.{scss/styl}
-|   |   |   |   +-- normalize.{scss/styl}
-|   |   |   |   +-- typography.{scss/styl}
-|   |   |   +-- components
-|   |   |   +-- modules
-|   |   |   +-- main.{scss/styl}
+|   |   |   +-- application.{scss/styl}
 |   |   +-- vendor // vendor css/js files go here
 |   |   +-- favico.ico
 |   +-- templates

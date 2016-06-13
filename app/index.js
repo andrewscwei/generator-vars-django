@@ -1,33 +1,24 @@
-/**
- * generator-vars-django
- * (c) VARIANTE <http://variante.io>
- *
- * This software is released under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
- */
+// (c) Andrew Wei
 
 'use strict';
 
-var fs = require('fs');
-var path = require('path');
-var yeoman = require('yeoman-generator');
-var yosay = require('yosay');
-var chalk = require('chalk');
+const _ = require('underscore.string');
+const chalk = require('chalk');
+const fs = require('fs');
+const path = require('path');
+const yeoman = require('yeoman-generator');
+const yosay = require('yosay');
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
   constructor: function() {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     this.argument('projectname', {
       type: String,
       required: false
     });
-    this.appname = this.projectname || this.appname;
 
-    this.option('skip-welcome-message', {
-      desc: 'Skips the welcome message',
-      type: Boolean
-    });
+    this.appname = _.slugify(this.projectname || this.appname);
 
     this.option('skip-install', {
       desc: 'Skips the installation of dependencies',
@@ -47,40 +38,31 @@ module.exports = yeoman.generators.Base.extend({
 
   prompting: {
     welcome: function() {
-      var done = this.async();
+      let done = this.async();
 
-      if (!this.options['skip-welcome-message']) {
-        this.log(yosay('\'Allo \'allo! Out of the box I include Browserify as well as Gulp to build your Django app.'));
-      }
+      this.log(yosay('\'Allo \'allo! Out of the box I include Browserify as well as Gulp to build your Django app.'));
 
       if (!process.env.VIRTUAL_ENV) {
         this.log(chalk.yellow('\nWARNING: ') + 'You are not in a Python virtual environment. Please activate your Python environment before using this generator.');
         return;
       }
 
-      var prompts = [{
+      let prompts = [{
         type: 'input',
         name: 'appauthor',
         message: 'Who is the author? (this will appear in the header of your source files)'
-      }, {
-        type: 'input',
-        name: 'appauthoremail',
-        message: 'What is your email? (this will appear in the header of your source files)'
       }];
 
-      this.prompt(prompts, function(answers) {
+      this.prompt(prompts, (answers) => {
         this.appauthor = answers.appauthor;
-        this.appauthoremail = answers.appauthoremail;
-        this.djangoversion = answers.djangoversion;
-
         done();
-      }.bind(this));
+      });
     },
 
     database: function() {
-      var done = this.async();
+      let done = this.async();
 
-      var prompts = [{
+      let prompts = [{
         type: 'list',
         name: 'database',
         message: 'Which database engine do you prefer?',
@@ -96,16 +78,16 @@ module.exports = yeoman.generators.Base.extend({
         }]
       }];
 
-      this.prompt(prompts, function(answers) {
+      this.prompt(prompts, (answers) => {
         this.database = answers.database;
         done();
-      }.bind(this));
+      });
     },
 
     css: function() {
-      var done = this.async();
+      let done = this.async();
 
-      var prompts = [{
+      let prompts = [{
         type: 'list',
         name: 'css',
         message: 'Which preprocessed CSS language do you prefer?',
@@ -118,154 +100,53 @@ module.exports = yeoman.generators.Base.extend({
         }]
       }];
 
-      this.prompt(prompts, function(answers) {
+      this.prompt(prompts, (answers) => {
         this.css = answers.css;
-
         done();
-      }.bind(this));
-    },
-
-    features: function() {
-      var done = this.async();
-
-      var prompts = [{
-        type: 'checkbox',
-        name: 'features',
-        message: 'What more would you like?',
-        choices: [{
-          name: 'Bootstrap',
-          value: 'includeBootstrap',
-          checked: false
-        }, {
-          name: 'jQuery',
-          value: 'includejQuery',
-          checked: false
-        }]
-      }];
-
-      this.prompt(prompts, function(answers) {
-        var features = answers.features;
-
-        var hasFeature = function(feat) {
-          return features.indexOf(feat) !== -1;
-        };
-
-        this.includeBootstrap = hasFeature('includeBootstrap');
-        this.includejQuery = hasFeature('includejQuery');
-
-        done();
-      }.bind(this));
+      });
     }
   },
 
-  writing: {
-    config: function() {
-      this.copy('buildpacks', '.buildpacks');
-      this.copy('gitignore', '.gitignore');
-      this.copy('gitattributes', '.gitattributes');
-      this.copy('requirements.txt', 'requirements.txt');
-      this.copy('editorconfig', '.editorconfig');
-      this.copy('README.md', 'README.md');
+  writing: function() {
+    let files = this.expandFiles('**', { dot: true, cwd: this.sourceRoot() });
 
-      this.copy('jshintrc', '.jshintrc');
-      this.copy('app/jshintrc', this.paths.src + '/.jshintrc');
-      this.copy('tasks/jshintrc', 'tasks/.jshintrc');
+    for (let i = 0; i < files.length; i++) {
+      let f = files[i];
+      let src = path.join(this.sourceRoot(), f);
+      let basename = path.basename(f);
 
-      this.template('gulpfile.js');
-      this.template('tasks/taskconfig', 'tasks/.taskconfig');
-      this.template('tasks/commands.js');
-      this.template('tasks/clean.js');
-      this.template('tasks/build.js');
-      this.template('tasks/serve.js');
-      this.template('package.json', 'package.json');
-      this.template('environment', '.environment');
-      this.template('uwsgi_params', 'uwsgi_params');
-      this.template('uwsgi.ini', this.appname + '_uwsgi.ini');
-      this.template('nginx.conf', this.appname + '_nginx.conf');
-    },
-
-    app: function() {
-      var ext = '.';
-
-      switch (this.css) {
-        case 'Sass':
-          ext += 'scss';
+      switch (basename) {
+        case '.DS_Store':
+          // Do nothing
           break;
-        case 'Stylus':
-          ext += 'styl';
+        case 'uwsgi.ini':
+        case 'nginx.conf':
+          this.template(src, path.join(path.dirname(f), `${this.appname}_${basename}`));
+          break;
+        case 'application.css':
+          if (this.css === 'Sass')
+            this.template(src, path.join(path.dirname(f), `application.scss`));
+          else if (this.css === 'Stylus')
+            this.template(src, path.join(path.dirname(f), `application.styl`));
+          else
+            this.template(src, path.join(path.dirname(f), `application.css`));
+          break;
+        case 'gitignore':
+        case 'secrets':
+          this.template(src, path.join(path.dirname(f), `.${basename}`));
           break;
         default:
-          ext += 'css';
-          break;
+          if (~['.png', '.jpg', '.ico'].indexOf(path.extname(basename)))
+            this.copy(src, path.join(path.dirname(f), basename));
+          else
+            this.template(src, path.join(path.dirname(f), basename));
       }
-
-      this.mkdir(this.paths.src);
-      this.template('app/manage.py', this.paths.src + '/manage.py');
-
-      this.mkdir(this.paths.src + '/project');
-      this.copy('app/project/__init__.py', this.paths.src + '/project/__init__.py');
-      this.template('app/project/urls.py', this.paths.src + '/project/urls.py');
-      this.template('app/project/views.py', this.paths.src + '/project/views.py');
-      this.template('app/project/wsgi.py', this.paths.src + '/project/wsgi.py');
-
-      this.mkdir(this.paths.src + '/project/apps');
-      this.copy('app/project/apps/__init__.py', this.paths.src + '/project/apps/__init__.py');
-
-      this.mkdir(this.paths.src + '/project/settings');
-      this.copy('app/project/settings/__init__.py', this.paths.src + '/project/settings/__init__.py');
-      this.template('app/project/settings/base.py', this.paths.src + '/project/settings/base.py');
-      this.template('app/project/settings/dev.py', this.paths.src + '/project/settings/dev.py');
-      this.template('app/project/settings/prod.py', this.paths.src + '/project/settings/prod.py');
-
-      this.mkdir(this.paths.src + '/static');
-      this.mkdir(this.paths.src + '/static/img');
-      this.copy('app/static/img/apple-touch-icon-114x114.png', this.paths.src + '/static/img/apple-touch-icon-114x114.png');
-      this.copy('app/static/img/apple-touch-icon-57x57.png', this.paths.src + '/static/img/apple-touch-icon-57x57.png');
-      this.copy('app/static/img/apple-touch-icon-72x72.png', this.paths.src + '/static/img/apple-touch-icon-72x72.png');
-      this.copy('app/static/img/apple-touch-icon.png', this.paths.src + '/static/img/apple-touch-icon.png');
-      this.copy('app/static/img/favicon.png', this.paths.src + '/static/img/favicon.png');
-      this.copy('app/static/img/og-image.png', this.paths.src + '/static/img/og-image.png');
-      this.copy('app/static/favicon.ico', this.paths.src + '/static/favicon.ico');
-
-      this.mkdir(this.paths.src + '/static/css');
-      this.template('app/static/css/main' + ext, this.paths.src + '/static/css/main' + ext);
-
-      this.mkdir(this.paths.src + '/static/css/base');
-      this.template('app/static/css/base/definitions', this.paths.src + '/static/css/base/definitions' + ext);
-      this.template('app/static/css/base/normalize', this.paths.src + '/static/css/base/normalize' + ext);
-      this.template('app/static/css/base/typography', this.paths.src + '/static/css/base/typography' + ext);
-      this.template('app/static/css/base/layout', this.paths.src + '/static/css/base/layout' + ext);
-
-      this.mkdir(this.paths.src + '/static/css/components');
-      this.mkdir(this.paths.src + '/static/css/modules');
-
-      this.mkdir(this.paths.src + '/static/js');
-      this.template('app/static/js/main.js', this.paths.src + '/static/js/main.js');
-
-      this.mkdir(this.paths.src + '/static/img');
-      this.mkdir(this.paths.src + '/static/vendor');
-
-      this.mkdir(this.paths.src + '/templates');
-      this.template('app/templates/robots.txt', this.paths.src + '/templates/robots.txt');
-      this.template('app/templates/base.html', this.paths.src + '/templates/base.html');
-      this.template('app/templates/index.html', this.paths.src + '/templates/index.html');
-    },
-
-    templates: function() {
-      this.indexFile = this.readFileAsString(this.templatePath('app/templates/base.html'));
-      this.indexFile = this.engine(this.indexFile, this);
-      this.indexFile = this.appendFiles({
-        html: this.indexFile,
-        fileType: 'js',
-        optimizedPath: 'js/main.js',
-        sourceFileList: ['js/main.js']
-      });
     }
   },
 
   install: {
     pip: function() {
-      var done = this.async();
+      let done = this.async();
 
       if (this.options['skip-install']) {
         this.log('Skipping pip dependency installation. You will have to manually run ' + chalk.yellow.bold('pip install -r requirements.txt') + '.');
@@ -275,9 +156,9 @@ module.exports = yeoman.generators.Base.extend({
           this.log(chalk.magenta('Installing pip dependencies...'));
           this.spawnCommand('pip', ['install', '-r', 'requirements.txt']).on('exit', function() {
             // Add environment variables to virtualenv.
-            var envs = this.readFileAsString(this.destinationPath('.environment')).replace(/(^#.+$)/gm, '').replace(/(^\n)/gm, '');
-            var file = this.destinationPath('bin/activate');
-            var venv = this.readFileAsString(file) + '\n' + envs;
+            let envs = this.readFileAsString(this.destinationPath('.secrets')).replace(/(^#.+$)/gm, '').replace(/(^\n)/gm, '');
+            let file = path.join(process.env.VIRTUAL_ENV, 'bin/activate');
+            let venv = this.readFileAsString(file) + '\n' + envs;
 
             this.writeFileFromString(venv, file);
 

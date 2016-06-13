@@ -1,12 +1,10 @@
-"""
-<%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
-(c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
-
+"""<% if (appauthor !== '') { %>
+(c) <%= appauthor %><% } %>
 For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
+https://docs.djangoproject.com/en/1.9/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
+https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 from project.settings.base import *
@@ -25,7 +23,6 @@ TMP_DIR = os.path.join(PROJECT_DIR, '<%= paths.tmp %>')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 # SECURITY WARNING: change this to more specific hosts in production!
 ALLOWED_HOSTS = ['*']

@@ -1,17 +1,15 @@
-"""
-<%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
-(c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
-
-WSGI config for project project.
-
+"""<% if (appauthor !== '') { %>
+(c) <%= appauthor %><% } %>
 It exposes the WSGI callable as a module-level variable named ``application``.
 
-This software is released under the MIT License:
-http://www.opensource.org/licenses/mit-license.php
+For more information on this file, see
+https://docs.djangoproject.com/en/1.9/howto/deployment/wsgi/
 """
 
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings.prod")
 
 from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings.prod")
+
 application = get_wsgi_application()

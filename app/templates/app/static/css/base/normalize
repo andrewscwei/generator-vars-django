@@ -1,4 +1,0 @@
-/**
- * <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
- * (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
- */

@@ -1,10 +1,10 @@
 <!doctype html>
-<html class='no-js'>
+<html>
   <head>
     {% load static from staticfiles %}
 
     {% block title %}
-    <title></title>
+    <title><%= appname %></title>
     {% endblock %}
 
     {% block meta %}
@@ -13,25 +13,41 @@
     <meta name='description' content=''/>
     <meta name='keywords' content=''>
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'/>
+    <meta name='mobile-web-app-capable' content='yes'/>
+    <meta name='apple-mobile-web-app-capable' content='yes'/>
+    <meta name='apple-mobile-web-app-title' content='<%= appname %>'/>
     <meta property='og:url' content=''/>
-    <meta property='og:image' content='{% static "img/og-image.png" %}'/>
+    <meta property='og:image' content='{% static "og-image.png" %}'/>
     <meta property='og:title' content=''/>
     <meta property='og:description' content=''/>
+    <meta name='msapplication-config' content='{% static "browserconfig.xml" %}'/>
+    <meta name='application-name' content='<%= appname %>'/>
+    <meta name='msapplication-tooltip' content='Get the latest updates!'/>
+    <meta name='msapplication-window' content='width=1024;height=768'/>
+    <meta name='msapplication-navbutton-color' content='#ff3300'/>
+    <meta name='msapplication-starturl' content='/'/>
     {% endblock %}
 
     {% block icons %}
-    <link rel='shortcut icon' href='{% static "img/favicon.png" %}'/>
-    <link rel='apple-touch-icon' href='{% static "img/apple-touch-icon.png" %}' />
-    <link rel='apple-touch-icon' sizes='57x57' href='{% static "img/apple-touch-icon-57x57.png" %}' />
-    <link rel='apple-touch-icon' sizes='72x72' href='{% static "img/apple-touch-icon-72x72.png" %}' />
-    <link rel='apple-touch-icon' sizes='114x114' href='{% static "img/apple-touch-icon-114x114.png" %}' />
+    <link rel='shortcut icon' href='{% static "favicon.png" %}'/>
+    <link rel='manifest' href='{% static "manifest.json" %}'/>
+    <link href='{% static "apple-touch-icon-180x180-precomposed.png" %}' sizes='180x180' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-152x152-precomposed.png" %}' sizes='152x152' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-144x144-precomposed.png" %}' sizes='144x144' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-120x120-precomposed.png" %}' sizes='120x120' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-114x114-precomposed.png" %}' sizes='114x114' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-76x76-precomposed.png" %}' sizes='76x76' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-72x72-precomposed.png" %}' sizes='72x72' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-60x60-precomposed.png" %}' sizes='60x60' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-57x57-precomposed.png" %}' sizes='57x57' rel='apple-touch-icon'/>
+    <link href='{% static "apple-touch-icon-precomposed.png" %}' rel='apple-touch-icon'/>
     {% endblock %}
 
     {% block fonts %}
     {% endblock %}
 
     {% block styles %}
-    <link rel='stylesheet' href='{% static "css/main.css" %}'>
+    <link rel='stylesheet' href='{% static "stylesheets/application.css" %}'>
     {% endblock %}
 
     {% block head_scripts %}

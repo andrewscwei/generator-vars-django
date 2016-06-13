@@ -1,7 +1,5 @@
-/**
- * <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
- * (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
- */
+<% if (appauthor !== '') { %>// (c) <%= appauthor %>
+<% } %>
 
 var config = require('./.taskconfig');
 var del = require('del');

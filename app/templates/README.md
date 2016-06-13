@@ -14,7 +14,7 @@ Initialize ```virtualenv``` if needed:
 $ virtualenv {path}
 ```
 
-Add generated environment variables in ```./.environment``` to ```{virtualenv_path}/bin/activate``` if needed.
+Add generated environment variables in ```./.secrets``` to ```{virtualenv_path}/bin/activate``` if needed.
 
 (Re)activate ```virtualenv```:
 ```

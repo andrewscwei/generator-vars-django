@@ -1,0 +1,2 @@
+<% if (appauthor !== '') { %>// (c) <%= appauthor %>
+<% } %>

@@ -1,7 +1,5 @@
-/**
- * <%= appname %><% if (appauthor !== '' || appauthoremail !== '') { %>
- * (c)<% if (appauthor !== '') { %> <%= appauthor %><% } %><% if (appauthoremail !== '') { %> <<%= appauthoremail %>><% } %><% } %>
- */
+<% if (appauthor !== '') { %>// (c) <%= appauthor %>
+<% } %>
 
 var browserSync = require('browser-sync');
 var config = require('./.taskconfig');
@@ -14,9 +12,9 @@ var $util = require('gulp-util');
  * Serves the app locally. In production, watch option is not supported. This is meant for
  * development only.
  *
- * @param {Boolean} debug
- * @param {Number}  port
- * @param {Boolean} watch
+ * @param {boolean} debug
+ * @param {number}  port
+ * @param {boolean} watch
  */
 gulp.task('serve', function() {
   if (config.env.watch && !config.debug) {
