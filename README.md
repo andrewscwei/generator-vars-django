@@ -1,4 +1,4 @@
-# generator-vars-django
+# generator-vars-django [![Circle CI](https://circleci.com/gh/andrewscwei/generator-vars-django/tree/master.svg?style=svg)](https://circleci.com/gh/andrewscwei/generator-vars-django/tree/master) [![npm version](https://badge.fury.io/js/generator-vars-django.svg)](https://badge.fury.io/js/generator-vars-django)
 
 Yeoman generator for a raw Django web app.
 
