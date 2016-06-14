@@ -1,0 +1,9 @@
+machine:
+  node:
+    version: 5.6.0
+deployment:
+  release:
+    tag: /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+    commands:
+      - chmod +x ./scripts/release.sh
+      - ./scripts/release.sh

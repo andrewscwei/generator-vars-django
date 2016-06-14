@@ -133,7 +133,7 @@ For details on initial setup procedures of the project, see its generated ```REA
 ### 2.1.0
 1. Django 1.9.6
 2. Python 3
-3. Node >= 5.0.0
+3. Node >= 5.6.0
 
 ### 2.0.0
 1. Updated version numbers of NPM package dependencies.
