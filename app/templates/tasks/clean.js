@@ -1,9 +1,9 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
 <% } %>
 
-var config = require('./.taskconfig');
-var del = require('del');
-var gulp = require('gulp');
+const config = require('./.taskconfig');
+const del = require('del');
+const gulp = require('gulp');
 
 /**
  * Cleans /<%= paths.tmp %> and /<%= paths.build %> directories.

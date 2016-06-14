@@ -2,6 +2,11 @@
 
 Yeoman generator for a raw Django web app.
 
+## Requirements
+
+- Python 3
+- Node >= 5.6.0
+
 ## Features
 
 - [Django 1.9.6](https://www.djangoproject.com)
@@ -10,7 +15,7 @@ Yeoman generator for a raw Django web app.
 - [Browserify](http://browserify.org)
 - [Babel](https://babeljs.io) for coding in ES6 standards
 - Watchify for quick Browserify rebundling
-- [Sass](http://sass-lang.com)/[Stylus](https://learnboost.github.io/stylus/) with Scalable and Modular Architecture (SMACSS) setup
+- [Sass](http://sass-lang.com)/[Stylus](https://learnboost.github.io/stylus/)
 - Choice from 3 database types: SQLite/MySQL/PostgreSQL
 - [uWSGI](https://uwsgi-docs.readthedocs.org/en/latest/) and [Nginx](http://wiki.nginx.org/Main) configurations
 - [H5BP favicon and app icon template](http://littlewebgiants.com/favicon-and-app-icon-template/)
@@ -41,7 +46,6 @@ Yeoman generator for a raw Django web app.
 |   |   |   +-- application.js
 |   |   +-- stylesheets
 |   |   |   +-- application.{scss/styl}
-|   |   +-- vendor // vendor css/js files go here
 |   |   +-- videos
 |   |   +-- apple-touch-icon-180x180-precomposed.png
 |   |   +-- apple-touch-icon-152x152-precomposed.png
@@ -130,10 +134,12 @@ For details on initial setup procedures of the project, see its generated ```REA
 
 ## Release Notes
 
-### 2.1.0
-1. Django 1.9.6
-2. Python 3
-3. Node >= 5.6.0
+### 3.0.0
+1. Upgraded Django to 1.9.6
+2. Upgraded Python to v3
+3. Upgraded Node to minimum v5.6.0
+4. Simplified Gulp pipeline
+5. Added [H5BP favicon and app icon template](http://littlewebgiants.com/favicon-and-app-icon-template/)
 
 ### 2.0.0
 1. Updated version numbers of NPM package dependencies.

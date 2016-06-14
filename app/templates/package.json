@@ -4,7 +4,7 @@
   "private": true,
   "repository": {},
   "engines": {
-    "node": ">=5.0.0"
+    "node": ">=5.6.0"
   },
   "scripts": {
     "clean": "gulp clean",
@@ -17,26 +17,24 @@
   "dependencies": {
   },
   "devDependencies": {
-    "autoprefixer-core": "^6.0.1",
-    "babelify": "^6.1.2",
-    "browser-sync": "^2.9.10",
-    "browserify": "^11.2.0",
-    "del": "^2.0.2",
-    "gulp": "^3.8.11",
-    "gulp-concat": "^2.5.2",
-    "gulp-csso": "^1.0.0",
-    "gulp-if": "^1.2.5",
-    "gulp-minify-html": "^1.0.1",
-    "gulp-postcss": "^6.0.0",<% if (css == 'Stylus') { %>
+    "autoprefixer": "^6.3.6",
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.13.0",
+    "browserify": "^13.0.1",
+    "del": "^2.2.0",
+    "cssnano": "^3.7.0",
+    "gulp": "^3.9.1",
+    "gulp-htmlmin": "^2.0.0",
+    "gulp-if": "^2.0.1",
+    "gulp-postcss": "^6.1.1",<% if (css == 'Stylus') { %>
     "gulp-stylus": "^2.1.0",<% } else if (css == 'Sass') { %>
-    "gulp-sass": "^2.0.4",<% } %>
-    "gulp-size": "^2.0.0",
+    "gulp-sass": "^2.3.1",<% } %>
+    "gulp-size": "^2.1.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.1.0",
     "gulp-util": "^3.0.4",
-    "merge-stream": "^1.0.0",
     "run-sequence": "^1.0.2",
-    "through2": "^0.6.5",
+    "through2": "^2.0.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.2.2"

@@ -1,43 +1,25 @@
 <% if (appauthor !== '') { %>// (c) <%= appauthor %>
 <% } %>
 
-var path = require('path');
-var $env = require('gulp-util').env;
+const path = require('path');
+const $env = require('gulp-util').env;
 
 /**
- * Specifies whether a task should be executed in the debug environment. Tasks may perform differently
- * when running in debug (namely skipping compression processes).
+ * Specifies whether a task should be executed in the debug environment. Tasks
+ * may perform differently when running in debug (i.e. skipping compression
+ * processes).
  *
- * @type {boolean}  --debug, --d, NODE_ENV = 'development' in env, GULP_CONFIG_DEBUG is present in env
+ * @type {boolean} --debug, --d, NODE_ENV = 'development' in env
  */
-var debug = $env['debug'] || $env['d'] || process.env.NODE_ENV === 'development' || process.env.GULP_CONFIG_DEBUG;
+const debug = $env['debug'] || $env['d'] || process.env.NODE_ENV === 'development';
 
 /**
- * Supported options specified through CLI params when executing Gulp tasks. Note that if debug is true,
- * all 'skip-' flags are default to true.
+ * Supported options specified through CLI params when executing Gulp tasks.
  *
- * @type {boolean}  --css-sourcemaps, --csm Specifies whether the pipeline will generate sourcemaps for CSS files.
- * @type {boolean}  --js-sourcemaps, --jsm  Specifies whether the pipeline will generate sourcemaps for JS files.
- * @type {number}   --port, --p             Specifies the port which BrowserSync will use when serving the app locally. Note
- *                                         that this value only affects the port that BrowserSync uses, not WEBrick (Rails server).
- *                                         This option is only available if you are executing a Gulp task that serves the app.
- *                                         The default value is 9000.
- * @type {boolean}  --skip-css-min, --sc    Specifies whether CSS minification should be skipped.
- * @type {boolean}  --skip-html-min, --sh   Specifies whether HTML minification should be skipped.
- * @type {boolean}  --skip-js-min, --sj     Specifies whether JavaScript uglification should be skipped.
- * @type {boolean}  --serve, --s            Specifies whether the app will be served at the end of designated tasks.
- * @type {boolean}  --watch, --w            Specifies whether files should be watched. This option is only available
- *                                         in designated tasks. When enabled, modified files will automatically be pipelined
- *                                         into their corresponding compile tasks and will trigger a browser refresh on
- *                                         complete.
+ * @type {boolean} --serve, --s - Specifies whether the app will be served.
+ * @type {boolean} --watch, --w - Specifies whether files should be watched.
  */
-var env = {
-  cssSourcemaps: $env['css-sourcemaps'] || $env['csm'],
-  jsSourcemaps: $env['js-sourcemaps'] || $env['jsm'] || debug,
-  port: $env['port'] || $env['p'],
-  skipCSSMin: $env['skip-css-min'] || $env['sc'] || debug,
-  skipHTMLMin: $env['skip-html-min'] || $env['sh'] || debug,
-  skipJSMin: $env['skip-js-min'] || $env['sj'] || debug,
+const env = {
   serve: $env['serve'] || $env['s'],
   watch: $env['watch'] || $env['w']
 };
@@ -45,14 +27,13 @@ var env = {
 /**
  * Common extensions per file type for glob patterns.
  */
-var patterns = {
+const patterns = {
   core: '{py,sqlite3}',
   images: '{jpg,jpeg,gif,png,svg}',
   videos: '{ogv,mp4}',
-  scripts: '{js,js.erb,coffee}',
-  sourcemaps: '{css.map,js.map}',
-  styles: '{css,styl,less,scss,sass,css.erb,scss.erb,sass.erb}',
-  templates: '{html,shtml,htm,html.erb,asp,php,md,jade,txt}',
+  scripts: 'js',
+  styles: '{css,styl,less,scss,sass}',
+  templates: '{html,htm,php,txt}',
   data: '{json,yml,csv}',
   fonts: '{eot,svg,ttf,woff,woff2}'
 };
@@ -60,157 +41,10 @@ var patterns = {
 /**
  * Common paths used throughout the Gulp pipeline.
  */
-var paths = {
+const paths = {
   src: path.join(__dirname, '../', '<%= paths.src %>'),
   tmp: path.join(__dirname, '../', '<%= paths.tmp %>'),
   build: path.join(__dirname, '../', '<%= paths.build %>')
-};
-
-/**
- * Configuration for the 'clean' task.
- */
-var clean = {
-  entry: [paths.tmp, paths.build]
-};
-
-/**
- * Configuration for the 'images' task.
- */
-var images = {
-  entry: path.join(paths.src, 'static', 'images', '**', '*.' + patterns.images),
-  output: path.join(paths.tmp, 'static', 'images')
-};
-
-/**
- * Configuration for the 'videos' task.
- */
-var videos = {
-  entry: path.join(paths.src, 'static', 'videos', '**', '*.' + patterns.videos),
-  output: path.join(paths.tmp, 'static', 'images')
-};
-
-/**
- * Configuration for the 'fonts' task.
- */
-var fonts = {
-  entry: [
-    path.join(paths.src, 'static', 'fonts', '**', '*.' + patterns.fonts)
-  ],
-  output: path.join(paths.tmp, 'static', 'fonts')
-};
-
-/**
- * Configuration for the 'extras' task.
- */
-var extras = {
-  entry: path.join(paths.src, 'static', '*'),
-  output: path.join(paths.tmp, 'static')
-};
-
-/**
- * Configuration for the 'core' task.
- */
-var core = {
-  entry: path.join(paths.src, '**', '*.' + patterns.core),
-  output: (debug) ? path.join(paths.tmp) : path.join(paths.build)
-};
-
-/**
- * Configuration for the 'styles' task.
- */
-var styles = {
-  entry: path.join(paths.src, 'static', '**', 'stylesheets', '*.' + patterns.styles),<% if (css == 'Stylus') { %>
-  stylus: {
-    'include css': true,
-    include: [
-      path.join(__dirname, '../', 'node_modules'),
-      path.join(paths.src, 'static', 'stylesheets')
-    ]
-  },<% } else if (css == 'Sass') { %>
-  sass: {
-    outputStyle: 'nested',
-    includePaths: [
-      path.join(__dirname, '../', 'node_modules'),
-      path.join(paths.src, 'static', 'stylesheets')
-    ],
-  },<% } %>
-  autoprefixer: {
-    browsers: ['last 2 version', 'ie 9']
-  },
-  output: path.join(paths.tmp, 'static'),
-  vendorFileName: 'vendor.css',
-  vendorEntry: path.join(paths.src, 'static', 'vendor', '**', '*.' + patterns.styles),
-  vendorOutput: path.join(paths.tmp, 'static', 'vendor')
-};
-
-/**
- * Configuration for the 'scripts' task.
- */
-var scripts = {
-  entry: path.join(paths.src, 'static', '**', 'javascripts', '*.' + patterns.scripts),
-  output: path.join(paths.tmp, 'static'),
-  vendorFileName: 'vendor.js',
-  vendorEntry: path.join(paths.src, 'static', 'vendor', '**', '*.' + patterns.scripts),
-  vendorOutput: path.join(paths.tmp, 'static', 'vendor')
-};
-
-/**
- * Configuration for the 'templates' task.
- */
-var templates = {
-  entry: path.join(paths.src, 'templates', '**', '*.' + patterns.templates),
-  output: (debug) ? path.join(paths.tmp, 'templates') : path.join(paths.build, 'templates'),
-  minifyHTML: {
-    empty: true,
-    conditionals: true,
-    loose: true
-  }
-};
-
-/**
- * Configuration for the 'build' task.
- */
-var build = {
-  entry: path.join(paths.build, '**', '*'),
-  output: paths.build
-};
-
-/**
- * Configuration for the 'serve' task.
- */
-var serve = {
-  browserSync: {
-    files: (debug) ? [paths.tmp] : [paths.build],
-    notify: false,
-    proxy: '0.0.0.0:3000',
-    open: false,
-    port: (typeof port === 'number') ? env.port : 9000
-  }
-};
-
-/**
- * Configuration for file watching.
- */
-var watch = {
-  entries: [{
-    files: path.join(paths.src, '**', '*.' + patterns.core),
-    tasks: ['core']
-  }, {
-    files: path.join(paths.src, 'static', '**', '*.' + patterns.images),
-    tasks: ['images']
-  }, {
-    files: path.join(paths.src, 'static', '**', '*.' + patterns.videos),
-    tasks: ['videos']
-  }, {
-    files: path.join(paths.src, 'static', '**', '*.' + patterns.styles),
-    tasks: ['styles']
-  }, {
-    files: path.join(paths.src, 'static', '**', '*.' + patterns.fonts),
-    tasks: ['fonts']
-  }, {
-    files: path.join(paths.src, 'templates', '**', '*.' + patterns.templates),
-    tasks: ['templates']
-  }]
 };
 
 module.exports = {
@@ -218,16 +52,94 @@ module.exports = {
   env: env,
   patterns: patterns,
   paths: paths,
-  clean: clean,
-  images: images,
-  videos: videos,
-  fonts: fonts,
-  extras: extras,
-  core: core,
-  styles: styles,
-  scripts: scripts,
-  templates: templates,
-  build: build,
-  serve: serve,
-  watch: watch
+  clean: {
+    entry: [paths.tmp, paths.build]
+  },
+  images: {
+    entry: path.join(paths.src, 'static', 'images', '**', '*.' + patterns.images),
+    output: path.join(paths.tmp, 'static', 'images')
+  },
+  videos: {
+    entry: path.join(paths.src, 'static', 'videos', '**', '*.' + patterns.videos),
+    output: path.join(paths.tmp, 'static', 'images')
+  },
+  fonts: {
+    entry: [
+      path.join(paths.src, 'static', 'fonts', '**', '*.' + patterns.fonts)
+    ],
+    output: path.join(paths.tmp, 'static', 'fonts')
+  },
+  extras: {
+    entry: path.join(paths.src, 'static', '*'),
+    output: path.join(paths.tmp, 'static')
+  },
+  core: {
+    entry: path.join(paths.src, '**', '*.' + patterns.core),
+    output: (debug) ? path.join(paths.tmp) : path.join(paths.build)
+  },
+  styles: {
+    entry: path.join(paths.src, 'static', '**', 'stylesheets', '*.' + patterns.styles),<% if (css == 'Stylus') { %>
+    stylus: {
+      'include css': true,
+      include: [
+        path.join(__dirname, '../', 'node_modules'),
+        path.join(paths.src, 'static', 'stylesheets')
+      ]
+    },<% } else if (css == 'Sass') { %>
+    sass: {
+      outputStyle: 'nested',
+      includePaths: [
+        path.join(__dirname, '../', 'node_modules'),
+        path.join(paths.src, 'static', 'stylesheets')
+      ],
+    },<% } %>
+    autoprefixer: {
+      browsers: ['last 2 version', 'ie 9']
+    },
+    output: path.join(paths.tmp, 'static')
+  },
+  scripts: {
+    entry: path.join(paths.src, 'static', '**', 'javascripts', '*.' + patterns.scripts),
+    output: path.join(paths.tmp, 'static')
+  },
+  templates: {
+    entry: path.join(paths.src, 'templates', '**', '*.' + patterns.templates),
+    output: (debug) ? path.join(paths.tmp, 'templates') : path.join(paths.build, 'templates'),
+    htmlmin: {
+      collapseWhitespace: true
+    }
+  },
+  build: {
+    entry: path.join(paths.build, '**', '*'),
+    output: paths.build
+  },
+  serve: {
+    browserSync: {
+      notify: false,
+      open: false,
+      proxy: '0.0.0.0:3000',
+      port: 9000
+    }
+  },
+  watch: {
+    entries: [{
+      files: path.join(paths.src, '**', '*.' + patterns.core),
+      tasks: ['core']
+    }, {
+      files: path.join(paths.src, 'static', '**', '*.' + patterns.images),
+      tasks: ['images']
+    }, {
+      files: path.join(paths.src, 'static', '**', '*.' + patterns.videos),
+      tasks: ['videos']
+    }, {
+      files: path.join(paths.src, 'static', '**', '*.' + patterns.styles),
+      tasks: ['styles']
+    }, {
+      files: path.join(paths.src, 'static', '**', '*.' + patterns.fonts),
+      tasks: ['fonts']
+    }, {
+      files: path.join(paths.src, 'templates', '**', '*.' + patterns.templates),
+      tasks: ['templates']
+    }]
+  }
 };
