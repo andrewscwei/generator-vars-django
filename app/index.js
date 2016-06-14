@@ -5,6 +5,7 @@
 const _ = require('underscore.string');
 const chalk = require('chalk');
 const fs = require('fs');
+const glob = require('glob');
 const path = require('path');
 const yeoman = require('yeoman-generator');
 const yosay = require('yosay');
@@ -108,7 +109,7 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function() {
-    let files = this.expandFiles('**', { dot: true, cwd: this.sourceRoot() });
+    let files = glob.sync('**', { dot: true, cwd: this.sourceRoot() });
 
     for (let i = 0; i < files.length; i++) {
       let f = files[i];
