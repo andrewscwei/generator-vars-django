@@ -51,27 +51,26 @@ Update environment variables in ```{virtualenv_path}/bin/activate``` with new da
 
 Apply initial migration:
 ```
-$ gulp migrate
+$ npm run migrate
 ```
 
 Test dev environment. You should see "Hello, World!":
 ```
-$ gulp --debug --serve
+$ npm run dev
 ```
 
 Test prod environment. You should see "Hello, World!":
 ```
-$ gulp --serve
+$ npm run prod
 ```
 
 ## Tasks
 
-```gulp --debug --watch --serve```: Compiles all source files, serves the site and watches for file changes. Best used during development.
+```$ npm run dev```: Compiles all source files, serves the site and watches for file changes. Best used during development.
 
-```gulp```: Builds the entire project in production.
+```$ npm run prod```: Builds the entire project in production.
 
-All tasks are broken into micro-tasks, check out the ```tasks``` folder for more details. Also see ```tasks/.taskconfig``` for more custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
-
+All tasks are broken into micro Gulp tasks, check out the ```tasks``` folder for more details. Also see ```tasks/.taskconfig``` for more custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
 
 ## Cloud Setup (Linux)
 

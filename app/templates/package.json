@@ -4,8 +4,7 @@
   "private": true,
   "repository": {},
   "engines": {
-    "node": ">=0.12.0",
-    "npm": ">=2.7.3"
+    "node": ">=5.0.0"
   },
   "scripts": {
     "clean": "gulp clean",

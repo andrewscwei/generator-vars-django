@@ -1,10 +1,10 @@
 # generator-vars-django
 
-VARIANTE's Yeoman generator for a raw Django web app.
+Yeoman generator for a raw Django web app.
 
 ## Features
 
-- [Django 1.7](https://www.djangoproject.com)
+- [Django 1.9.6](https://www.djangoproject.com)
 - [Gulp](http://gulpjs.com) setup for compression/minification of static files (i.e. images, CSS, JavaScripts) and templates (i.e. HTML), dev/prod deployment and various handy manage.py shortcuts
 - [BrowserSync](http://www.browsersync.io) for rapid development
 - [Browserify](http://browserify.org)
@@ -13,13 +13,7 @@ VARIANTE's Yeoman generator for a raw Django web app.
 - [Sass](http://sass-lang.com)/[Stylus](https://learnboost.github.io/stylus/) with Scalable and Modular Architecture (SMACSS) setup
 - Choice from 3 database types: SQLite/MySQL/PostgreSQL
 - [uWSGI](https://uwsgi-docs.readthedocs.org/en/latest/) and [Nginx](http://wiki.nginx.org/Main) configurations
-
-## Libraries
-
-- Bootstrap (optional)
-- jQuery (optional)
-
-For [Modernizr](http://modernizr.com), manually configure your custom build and put it in ```app/static/vendor``` folder, then include ```{% static 'vendor/vendor.js' %}``` in your HTML.
+- [H5BP favicon and app icon template](http://littlewebgiants.com/favicon-and-app-icon-template/)
 
 ## Structure
 
@@ -27,11 +21,10 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 .
 +-- .buildpacks
 +-- .editorconfig
-+-- .gitattributes
-+-- .gitignore
 +-- .jshintrc
++-- .gitignore
++-- .secrets
 +-- app
-|   +-- .jshintrc
 |   +-- project
 |   |   +-- apps // Django apps go here
 |   |   +-- settings
@@ -42,20 +35,41 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 |   |   +-- views.py
 |   |   +-- wsgi.py
 |   +-- static
-|   |   +-- img
-|   |   |   +-- apple-touch-icon-57x57.png
-|   |   |   +-- apple-touch-icon-72x72.png
-|   |   |   +-- apple-touch-icon-114x114.png
-|   |   |   +-- apple-touch-icon.png
-|   |   |   +-- favico.png
-|   |   |   +-- og-image.png
-|   |   +-- js
+|   |   +-- fonts
+|   |   +-- images
+|   |   +-- javascripts
 |   |   |   +-- application.js
-|   |   +-- css
+|   |   +-- stylesheets
 |   |   |   +-- application.{scss/styl}
 |   |   +-- vendor // vendor css/js files go here
-|   |   +-- favico.ico
-|   +-- templates
+|   |   +-- videos
+|   |   +-- apple-touch-icon-180x180-precomposed.png
+|   |   +-- apple-touch-icon-152x152-precomposed.png
+|   |   +-- apple-touch-icon-144x144-precomposed.png
+|   |   +-- apple-touch-icon-120x120-precomposed.png
+|   |   +-- apple-touch-icon-114x114-precomposed.png
+|   |   +-- apple-touch-icon-76x76-precomposed.png
+|   |   +-- apple-touch-icon-72x72-precomposed.png
+|   |   +-- apple-touch-icon-60x60-precomposed.png
+|   |   +-- apple-touch-icon-57x57-precomposed.png
+|   |   +-- apple-touch-icon-precomposed.png
+|   |   +-- browserconfig.xml
+|   |   +-- favicon.ico
+|   |   +-- favicon.png
+|   |   +-- large.png
+|   |   +-- launcher-icon-0-75x.png
+|   |   +-- launcher-icon-1-5x.png
+|   |   +-- launcher-icon-1x.png
+|   |   +-- launcher-icon-2x.png
+|   |   +-- launcher-icon-3x.png
+|   |   +-- launcher-icon-4x.png
+|   |   +-- manifest.json
+|   |   +-- og-image.png
+|   |   +-- robots.txt
+|   |   +-- square.png
+|   |   +-- tiny.png
+|   |   +-- wide.png
+|   |   +-- templates
 |   |   +-- base.html
 |   |   +-- index.html
 |   |   +-- robots.txt
@@ -63,11 +77,9 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 +-- build // runtime files go here
 +-- node_modules
 +-- tasks
-|   +-- .jshintrc
 |   +-- .taskconfig
 |   +-- build.js
 |   +-- clean.js
-|   +-- commands.js
 |   +-- serve.js
 +-- gulpfile.js
 +-- package.json
@@ -80,11 +92,11 @@ For [Modernizr](http://modernizr.com), manually configure your custom build and 
 
 ## Tasks
 
-```gulp --debug --watch --serve```: Compiles all source files, serves the site and watches for file changes. Best used during development.
+```$ npm run dev```: Compiles all source files, serves the site and watches for file changes. Best used during development.
 
-```gulp```: Builds the entire project in production.
+```$ npm run prod```: Builds the entire project in production.
 
-All tasks are broken into micro-tasks, check out the ```tasks``` folder for more details. Also see ```tasks/.taskconfig``` for more custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
+All tasks are broken into micro Gulp tasks, check out the ```tasks``` folder for more details. Also see ```tasks/.taskconfig``` for more custom flags such as ```--skip-js-min```, ```--skip-css-min```, etc.
 
 
 ## Usage
@@ -117,6 +129,11 @@ yo vars-django [app-name]
 For details on initial setup procedures of the project, see its generated ```README.md``` file.
 
 ## Release Notes
+
+### 2.1.0
+1. Django 1.9.6
+2. Python 3
+3. Node >= 5.0.0
 
 ### 2.0.0
 1. Updated version numbers of NPM package dependencies.
