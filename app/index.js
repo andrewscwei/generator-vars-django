@@ -43,7 +43,7 @@ module.exports = yeoman.Base.extend({
 
       this.log(yosay('\'Allo \'allo! Out of the box I include Browserify as well as Gulp to build your Django app.'));
 
-      if (!process.env.VIRTUAL_ENV) {
+      if (!process.env.VIRTUAL_ENV && !this.options['skip-install']) {
         this.log(chalk.yellow('\nWARNING: ') + 'You are not in a Python virtual environment. Please activate your Python environment before using this generator.');
         return;
       }
@@ -109,7 +109,7 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function() {
-    let files = glob.sync('**', { dot: true, cwd: this.sourceRoot() });
+    let files = glob.sync('**', { dot: true, cwd: this.sourceRoot(), nodir: true });
 
     for (let i = 0; i < files.length; i++) {
       let f = files[i];
@@ -124,13 +124,11 @@ module.exports = yeoman.Base.extend({
         case 'nginx.conf':
           this.template(src, path.join(path.dirname(f), `${this.appname}_${basename}`));
           break;
-        case 'application.css':
-          if (this.css === 'Sass')
-            this.template(src, path.join(path.dirname(f), `application.scss`));
-          else if (this.css === 'Stylus')
-            this.template(src, path.join(path.dirname(f), `application.styl`));
-          else
-            this.template(src, path.join(path.dirname(f), `application.css`));
+        case 'application':
+          let t = `${basename}.css`;
+          if (this.css === 'Sass') t = `${basename}.scss`;
+          if (this.css === 'Stylus') t = `${basename}.styl`;
+          this.template(src, path.join(path.dirname(f), t));
           break;
         case 'gitignore':
         case 'secrets':
