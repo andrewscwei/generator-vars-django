@@ -112,7 +112,7 @@ gulp.task('scripts', function() {
   function bundle(bundler, output, next) {
     return bundler.bundle()
       .on('error', function(err) {
-        util.log(util.colors.blue('[browserify]'), util.colors.red(`Error: ${err.message}`));
+        $util.log($util.colors.blue('[browserify]'), $util.colors.red(`Error: ${err.message}`));
         if (next) next(); else this.emit('end');
       })
       .on('end', function() {
