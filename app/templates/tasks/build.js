@@ -59,7 +59,7 @@ gulp.task('styles', function() {
   return gulp.src(config.styles.entry)
     .pipe($if(config.debug, $sourcemaps.init()))<% if (css == 'Stylus') { %>
     .pipe($stylus(config.styles.stylus).on('error', function(err) {
-      if (shouldWatch) {
+      if (config.env.watch) {
         // When watching, don't kill the process.
         $util.log($util.colors.blue(`[stylus]`), $util.colors.red(err.message));
         this.emit('end');
@@ -69,7 +69,7 @@ gulp.task('styles', function() {
       }
     }))<% } else if (css == 'Sass') { %>
     .pipe($sass(config.styles.sass).on('error', function(err) {
-      if (shouldWatch) {
+      if (config.env.watch) {
         // When watching, don't kill the process.
         $util.log($util.colors.blue(`[sass]`), $util.colors.red(err));
         this.emit('end');
