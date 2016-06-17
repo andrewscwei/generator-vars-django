@@ -129,6 +129,14 @@ gulp.task('scripts', function() {
 });
 
 /**
+ * Deploys db files.
+ */
+gulp.task('db', function() {
+  return gulp.src(config.db.entry, { dot: true })
+    .pipe(gulp.dest(config.db.output));
+});
+
+/**
  * Compiles and deploys core files.
  */
 gulp.task('core', function() {
@@ -159,7 +167,7 @@ gulp.task('templates', function() {
  * Builds the entire app with option to apply revisioning (via Django's
  * 'collectstatic' command).
  */
-gulp.task('build', ['core', 'templates', 'static'], function(done) {
+gulp.task('build', ['db', 'core', 'templates', 'static'], function(done) {
   if (!config.debug) {
     spawn('python', [path.join(config.paths.src, 'manage.py'), 'collectstatic', '--noinput'], {
       stdio: 'inherit'

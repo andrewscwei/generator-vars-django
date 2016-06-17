@@ -28,7 +28,8 @@ const env = {
  * Common extensions per file type for glob patterns.
  */
 const patterns = {
-  core: '{py,sqlite3}',
+  db: 'sqlite3',
+  core: 'py',
   images: '{jpg,jpeg,gif,png,svg}',
   videos: '{ogv,mp4}',
   scripts: 'js',
@@ -72,6 +73,10 @@ module.exports = {
   extras: {
     entry: path.join(paths.src, 'static', '*'),
     output: path.join(paths.tmp, 'static')
+  },
+  db: {
+    entry: path.join(paths.src, '**', '*.' + patterns.db),
+    output: (debug) ? path.join(paths.tmp) : path.join(paths.build)
   },
   core: {
     entry: path.join(paths.src, '**', '*.' + patterns.core),
