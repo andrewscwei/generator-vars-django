@@ -73,7 +73,7 @@ Yeoman generator for a raw Django web app.
 |   |   +-- square.png
 |   |   +-- tiny.png
 |   |   +-- wide.png
-|   |   +-- templates
+|   +-- templates
 |   |   +-- base.html
 |   |   +-- index.html
 |   |   +-- robots.txt
