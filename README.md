@@ -150,7 +150,3 @@ For details on initial setup procedures of the project, see its generated ```REA
 6. Removed `mocha`. It was never intended as a default test framework for a Django project. 
 7. Minor syntactic sugar changes.
 8. Lots of optimizations, particularly boosting the efficiency of automated rebuilds during development.
-
-## License
-
-This software is released under the [MIT License](http://opensource.org/licenses/MIT).
